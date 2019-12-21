@@ -169,7 +169,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
 
 Теперь необходимо добавить Identifier в Xcode:
 
-![AppGroup](../assets/AppGroup.png)
+![AppGroup](https://github.com/carrotquest/ios-sdk/blob/master/assets/AppGroup.png)
 
 1) В списке файлов выберите свой проект. 
 
