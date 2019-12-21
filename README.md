@@ -1,13 +1,13 @@
 ## Carrot quest для iOS (Beta)
 
-`Внимание!` Библиотека находится в стадии активной разработки. Возможны сбои в работе.
+`Внимание!`Библиотека находится в стадии активной разработки. Возможны сбои в работе.
 
 Carrot quest для iOS поддерживает версию iOS 10 и выше, Swift 4.2, Xcode 10.
 
 ## Установка
 На данный момент Carrot quest для iOS можно установить с помощью pod.
 
-## CocoaPods
+## cd CocoaPods
 Добавьте следующую строчку в pod файл:
 ```swift
 pod 'CarrotquestSDK'
@@ -107,49 +107,114 @@ Carrot.openChat(context);
 ```
 
 ### Уведомления
-Для работы с уведомлениями SDK использует сервис Firebase Cloud Messaging. В связи с этим на данном этапе необходимо получить ключ и отправить его нам в поддержку. Процесс настройки сервиса Firebase Cloud Messaging описан [здесь](https://firebase.google.com/docs/cloud-messaging?authuser=0)
+Для работы с уведомлениями SDK использует сервис Firebase Cloud Messaging. В связи с этим необходимо получить ключ и отправить его в Carrot. Вы можете найти поле для ввода ключа на вкладке Настройки > Разработчикам. Процесс настройки сервиса Firebase Cloud Messaging описан [здесь](https://firebase.google.com/docs/cloud-messaging/ios/client).
 
-Если вы уже используете сервис Firebase Cloud Messaging для своих push-уведомлений, то для корректной работы push-уведомлений в SDK необходимо отредактировать вашу службу FirebaseMessagingService. Это необходимо для "прокидывания" наших сообщений внутрь SDK. Пример:
-``` java
-public class MyFirebaseMessagingService extends FirebaseMessagingService {
-    @Override
-    public void onMessageReceived (RemoteMessage remoteMessage) {
-        Map<String, String> data = remoteMessage.getData();
-        if (data.containsKey(NotificationsConstants.CQ_SDK_PUSH) && "true".equals(data.get(NotificationsConstants.CQ_SDK_PUSH))) {
-            Carrot.sendFirebaseNotification(remoteMessage);
+Далее, в делегате MessagingDelegate необходимо установить fcmToken для Carrot SDK:
+
+```swift
+import FirebaseMessaging
+import CarrotSDK
+extension AppDelegate: MessagingDelegate {  
+    func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String) {
+        PushNotificationService.shared.setToken(fcmToken)
+        ...
+    }
+}
+```
+
+Для отображения уведомлений, необходимо добавить код в UNUserNotificationCenterDelegate:
+
+```swift
+import CarrotSDK
+extension AppDelegate: UNUserNotificationCenterDelegate {
+    func userNotificationCenter(
+        _ center: UNUserNotificationCenter,
+        willPresent notification: UNNotification,
+        withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        let notificationService = PushNotificationService.shared
+        if notificationService.isCarrot(notification) {
+            notificationService.show(notification, completionHandler: completionHandler)
         } else {
-            //Your code
+            // Логика для пользовательских уведомлений
         }
     }
 }
 ```
 
-Иконку уведомлений можно устанавливать используя метод:
-``` java
-Carrot.setNotificationIcon(notificationIconId)
-```
-где `notificationIconId` - это идентификатор ресурса иконки.
+Для обработки кликов на уведомления:
 
-Если вы хотите из любого места вашего приложения получать информацию о новых сообщениях в SDK, то вы можете реализовать BroadcastReceiver. Пример реализации:
-```java
-public class MyNewMessageBroadcastReceiver extends BroadcastReceiver {
-    @Override
-    public void onReceive(Context context, Intent intent) {
-        if(intent.hasExtra(NotificationsConstants.CQ_SDK_NEW_MESSAGE_ARG)) {
-            IncomingMessage incomingMessage = (IncomingMessage) intent.getSerializableExtra(NotificationsConstants.CQ_SDK_NEW_MESSAGE_ARG);
-            if (incomingMessage != null) {
-                Toast.makeText(context, incomingMessage.getText(), Toast.LENGTH_SHORT).show();
-            }
+```swift
+import CarrotSDK
+extension AppDelegate: UNUserNotificationCenterDelegate {
+    func userNotificationCenter(
+        _ center: UNUserNotificationCenter,
+        didReceive response: UNNotificationResponse,
+        withCompletionHandler completionHandler: @escaping () -> Void) {
+        let notificationService = PushNotificationService.shared
+        if notificationService.isCarrot(response) {
+            notificationService.clickNotification(notificationResponse: response)
+        } else {
+            // Логика для пользовательских уведомлений
+        }
+        completionHandler()
+    }
+}
+```
+
+### Случайное дублирование уведомлений
+
+При выходе из приложения, или при очень быстром удалении уведомления, возможно получение повтороного уведомления. Для предотвращения такого поведения нужно создать Notification Service Extension. В Xcode, в списке файлов выберите свой проект, а затем File/New/Target/Notification Service Extension.
+
+После чего необходимо зарегистрировать AppGroup в [Apple Developer Portal](https://developer.apple.com/account/resources/identifiers/list/applicationGroup). Identifier App Group должен быть уникальным, и начинаться на "group." иначе Xcode его не примет. 
+
+Теперь необходимо добавить Identifier в Xcode:
+
+![AppGroup](../assets/AppGroup.png)
+
+1) В списке файлов выберите свой проект. 
+
+2) В списке targets выберете пункт с именем вашего проекта. 
+
+3) Во вкладке "Singing & Capabitities" нажмите на "+ Capability". 
+
+4) В выпадающем списке найдите найдите и выберите App Group.
+
+5) На вкладке появится пустой список для идентификаторов App Group. Добавте туда Identifier, который зарегистрировали в Apple Developer Portal ранее. 
+
+6) Вернитесь к списку Targets. Аналогичным образом добавте App Group к вашему Notification Service Extension. 
+
+Теперь нужно добавить логику в ваш Notification Service Extension. В списке файлов, должна была появиться новая папка с именем вашего Notification Service Extension. Добавте код в файл NotificationService.swift:
+
+```swift
+import UserNotifications
+import CarrotSDK
+
+class NotificationService: UNNotificationServiceExtension {
+    var contentHandler: ((UNNotificationContent) -> Void)?
+    var bestAttemptContent: UNMutableNotificationContent?
+    override func didReceive(_ request: UNNotificationRequest, withContentHandler contentHandler: @escaping (UNNotificationContent) -> Void) {
+        self.contentHandler = contentHandler
+        guard let bestAttemptContent = (request.content.mutableCopy() as? UNMutableNotificationContent) else {
+            return
+        }
+        self.bestAttemptContent = bestAttemptContent
+        let domain = "Identifier зарегистрированный в Apple Developer Portal ранее"
+        PushNotificationService.shared.deleteDuplicateNotification(withContent: bestAttemptContent, appGroudDomain: domain)
+        contentHandler(bestAttemptContent)
+    }
+    
+    override func serviceExtensionTimeWillExpire() {
+        if let contentHandler = contentHandler, let bestAttemptContent =  bestAttemptContent {
+            contentHandler(bestAttemptContent)
         }
     }
 }
 ```
-`IncomingMessage` - класс, который описывает входящее сообщение.
 
-Далее нужно зарегистрировать его:
-``` java
-MyNewMessageBroadcastReceiver messageReceiver = new MyNewMessageBroadcastReceiver();
-IntentFilter filter = new IntentFilter();
-filter.addAction(NotificationsConstants.CQ_SDK_NEW_MESSAGE_ACTION);
-registerReceiver(messageReceiver, filter);
+И напоследок, нужно передать Identifier зарегистрированный в Apple Developer Portal ранее в метод show в UNUserNotificationCenterDelegate:
+
+```swift
+let domain = "Identifier зарегистрированный в Apple Developer Portal ранее"
+notificationService.show(notification, appGroudDomain: domain, completionHandler: completionHandler)
 ```
+
