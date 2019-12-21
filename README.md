@@ -15,7 +15,7 @@ pod 'CarrotquestSDK'
 
 ## Инициализация
 Для работы с Carrot quest для iOS вам понадобится API Key и User Auth Key. Вы можете найти эти ключи на вкладке "Настройки > Разработчикам":
-![Разработчикам](/assets/img/carrot_api_keys.png)
+![Разработчикам](https://github.com/carrotquest/ios-sdk/blob/master/assets/ApiKeys.png)
 
 Для инициализации Carrot quest вам нужно добавить следующий код в файл AppDelegate вашего приложения:
 
