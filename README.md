@@ -134,7 +134,7 @@ import FirebaseMessaging
 import CarrotSDK
 extension AppDelegate: MessagingDelegate {  
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String) {
-        PushNotificationService.shared.setToken(fcmToken)
+        CarrotNotificationService.shared.setToken(fcmToken)
         ...
     }
 }
@@ -149,7 +149,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
         _ center: UNUserNotificationCenter,
         willPresent notification: UNNotification,
         withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-        let notificationService = PushNotificationService.shared
+        let notificationService = CarrotNotificationService.shared
         if notificationService.isCarrot(notification) {
             notificationService.show(notification, completionHandler: completionHandler)
         } else {
@@ -217,7 +217,7 @@ class NotificationService: UNNotificationServiceExtension {
         }
         self.bestAttemptContent = bestAttemptContent
         let domain = "Identifier зарегистрированный в Apple Developer Portal ранее"
-        PushNotificationService.shared.deleteDuplicateNotification(withContent: bestAttemptContent, appGroudDomain: domain)
+        CarrotNotificationService.shared.deleteDuplicateNotification(withContent: bestAttemptContent, appGroudDomain: domain)
         contentHandler(bestAttemptContent)
     }
     
