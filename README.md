@@ -32,7 +32,7 @@ sed -i '' 's/\#if DEBUG/\#if FORCE_DEBUG/g' "${PODS_ROOT}/RxSwift/RxSwift/Observ
 sed -i '' 's/\#if DEBUG/\#if FORCE_DEBUG/g' "${PODS_ROOT}/RxSwift/RxSwift/Observables/Sink.swift"
 ```
 После чего сделать Clean Build
-Подробнее смотри ![тут](https://github.com/ReactiveX/RxSwift/issues/1972)
+Подробнее смотри [тут](https://github.com/ReactiveX/RxSwift/issues/1972)
 
 ## Инициализация
 Для работы с Carrot quest для iOS вам понадобится API Key и User Auth Key. Вы можете найти эти ключи на вкладке "Настройки > Разработчикам":
@@ -123,8 +123,8 @@ Carrot.shared.hideButton()
 
 ### Открытие чата из произвольного места
 Открыть чат можно также, вызвав из произвольного места (после инициализации) следующий код:
-```java
-Carrot.openChat(context);
+```swift
+Carrot.shared.openChat();
 ```
 
 ### Уведомления
