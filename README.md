@@ -150,7 +150,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
         willPresent notification: UNNotification,
         withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         let notificationService = CarrotNotificationService.shared
-        if notificationService.isCarrot(notification) {
+        if notificationService.canHandle(notification) {
             notificationService.show(notification, completionHandler: completionHandler)
         } else {
             // Логика для пользовательских уведомлений
@@ -169,7 +169,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
         didReceive response: UNNotificationResponse,
         withCompletionHandler completionHandler: @escaping () -> Void) {
         let notificationService = PushNotificationService.shared
-        if notificationService.isCarrot(response) {
+        if notificationService.canHandle(response) {
             notificationService.clickNotification(notificationResponse: response)
         } else {
             // Логика для пользовательских уведомлений
