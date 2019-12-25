@@ -5,9 +5,9 @@
 Carrot quest для iOS поддерживает версию iOS 10 и выше, Swift 4.2, Xcode 10.
 
 ## Установка
-На данный момент Carrot quest для iOS можно установить с помощью pod.
+На данный момент Carrot quest для iOS можно установить с помощью CocoaPod.
 
-## cd CocoaPods
+## CocoaPods
 Добавьте следующую строчку в pod файл:
 ```swift
 pod 'CarrotquestSDK'
@@ -118,9 +118,6 @@ Carrot.shared.showButton(in: view)
 Carrot.shared.hideButton()
 ```
 
-
-
-
 ### Открытие чата из произвольного места
 Открыть чат можно также, вызвав из произвольного места (после инициализации) следующий код:
 ```swift
@@ -182,9 +179,9 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
 }
 ```
 
-### Случайное дублирование уведомлений
+### Дублирование уведомлений
 
-При выходе из приложения, или при очень быстром удалении уведомления, возможно получение повтороного уведомления. Для предотвращения такого поведения нужно создать Notification Service Extension. В Xcode, в списке файлов выберите свой проект, а затем File/New/Target/Notification Service Extension.
+Мы используем 2 канала доставки сообщений, поэтому в некоторых случаях уведомления могут дублироваться. Например: при выходе из приложения, или при очень быстром удалении уведомления, возможно получение повтороного уведомления. Для предотвращения такого поведения нужно создать Notification Service Extension. В Xcode, в списке файлов выберите свой проект, а затем File/New/Target/Notification Service Extension.
 
 После чего необходимо зарегистрировать AppGroup в [Apple Developer Portal](https://developer.apple.com/account/resources/identifiers/list/applicationGroup). Identifier App Group должен быть уникальным, и начинаться на "group." иначе Xcode его не примет. 
 
@@ -230,6 +227,14 @@ class NotificationService: UNNotificationServiceExtension {
         }
     }
 }
+```
+
+Обновите ваш pod файл, добавьте:
+```
+   target 'NotificationService' do
+     inherit! :search_paths
+     pod 'CarrotquestSDK'
+   end
 ```
 
 И напоследок, нужно передать Identifier зарегистрированный в Apple Developer Portal ранее в метод show в UNUserNotificationCenterDelegate:
