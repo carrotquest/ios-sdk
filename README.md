@@ -168,7 +168,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
         _ center: UNUserNotificationCenter,
         didReceive response: UNNotificationResponse,
         withCompletionHandler completionHandler: @escaping () -> Void) {
-        let notificationService = PushNotificationService.shared
+        let notificationService = CarrotNotificationService.shared
         if notificationService.canHandle(response) {
             notificationService.clickNotification(notificationResponse: response)
         } else {
