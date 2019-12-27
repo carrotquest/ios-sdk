@@ -1,6 +1,6 @@
 
 ## Dashly for iOS (Beta)
-​
+
 `Attention!` Library is a work in progress. Malfunction is possible.
 ​
 Dashly for iOS supports iOS 10 and above, Swift 4.2, Xcode 10.
@@ -13,7 +13,7 @@ Add the following string into the pod file:
 ```swift
 pod 'DashlySDK'
 ```
-​
+
 `Attention`
 
 In case you're seeing any of these error messages after library connection
@@ -56,11 +56,11 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions lau
     ....
 }
 ```
-​
+
 ​
 ​
 ## User authorization
-​
+
 In case your application has user authorization, you might want to send user id to Dashly:
 ​
 ```Swift
@@ -74,9 +74,9 @@ Dashly.shared.auth(
             print("Dashly SDK user auth error: " + error)
         })
 ```
-​
+
 ## User properties and events
-​
+
 You can set user properties, using this method:
 ```Swift
 Dashly.shared.setUserProperty(userProperties)
@@ -113,18 +113,18 @@ You can use the following method to add chat button:
 ```Swift
 Dashly.shared.showButton(in: view)
 ```
-​
+
 Use this method to hide chat button:
 ```Swift
 Dashly.shared.hideButton()
 ```
-​
+
 ### Open chat from anywhere
 After initialization you can open chat from any place using thix method:
 ```swift
-Dashly.shared.openChat();
+Dashly.shared.openChat()
 ```
-​
+
 ### Notofications
 SDK uses Firebase Cloud Messaging for sending notifications. At the moment you are required to get a key and send it to our support. You can find an input for this key at "Settings" - "Developers" tab of Dashly admin panel. Cloud Messaging setup is described [here](https://firebase.google.com/docs/cloud-messaging/ios/client).
 ​
@@ -140,7 +140,7 @@ extension AppDelegate: MessagingDelegate {
     }
 }
 ```
-​
+
 Add this code into UNUserNotificationCenterDelegate to display notifications:
 ​
 ```swift
@@ -159,7 +159,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
     }
 }
 ```
-​
+
 Use this for handling clicks on notifications:
 ​
 ```swift
@@ -179,9 +179,9 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
     }
 }
 ```
-​
+
 ### Double notifications
-​
+
 We're delivering messagis via 2 channels, thus same notification can be received twice. Examples: when logging out or quickly deleting a notification there is a possibility of getting the same notification. Notification Service Extension should be created to prevent such behaviour. Choose your project in files list of Xcode, then File/New/Target/Notification Service Extension.
 
 After that register in AppGroup [Apple Developer Portal](https://developer.apple.com/account/resources/identifiers/list/applicationGroup). Identifier App Group should be unique and start with "group.", otherwise it would not be accepted by Xcode. 
@@ -229,7 +229,7 @@ class NotificationService: UNNotificationServiceExtension {
     }
 }
 ```
-​
+
 Refresh your pod file and add this:
 ```
    target 'NotificationService' do
@@ -237,11 +237,10 @@ Refresh your pod file and add this:
      pod 'DashlySDK'
    end
 ```
-​
+
 Lastly, send Identifier previously registered on Apple Developer Portal into show method in UNUserNotificationCenterDelegate:
 ​
 ```swift
 let domain = "Identifier previously registered on Apple Developer Portal"
 notificationService.show(notification, appGroudDomain: domain, completionHandler: completionHandler)
 ```
-​
