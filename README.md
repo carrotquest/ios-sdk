@@ -38,7 +38,7 @@ Detail [here](https://github.com/ReactiveX/RxSwift/issues/1972)
 ​
 ## Initialization
 You'll need API Key and User Auth Key to work with Dashly for iOS. Those can be found on Settings - Developers tab:
-![Developers](https://github.com/carrotquest/ios-sdk/blob/dashly/assets/ApiKeys.png)
+![Developers](https://github.com/carrotquest/ios-sdk/blob/dashly/assets/ApiKeys.png?raw=true)
 ​
 You should add this code into your app's AppDelegate file in order to initialize Dashly:
 ​
@@ -188,7 +188,7 @@ After that register in AppGroup [Apple Developer Portal](https://developer.apple
 ​
 Add Identifier into Xcode:
 ​
-![AppGroup](https://github.com/carrotquest/ios-sdk/blob/dashly/assets/AppGroup.png)
+![AppGroup](https://github.com/carrotquest/ios-sdk/blob/dashly/assets/AppGroup.png?raw=true)
 ​
 1) Choose your project in the files list. 
 ​
