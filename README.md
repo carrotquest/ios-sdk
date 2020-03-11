@@ -36,7 +36,7 @@ sed -i '' 's/\#if DEBUG/\#if FORCE_DEBUG/g' "${PODS_ROOT}/RxSwift/RxSwift/Observ
 
 ## Инициализация
 Для работы с Carrot quest для iOS вам понадобится API Key и User Auth Key. Вы можете найти эти ключи на вкладке "Настройки > Разработчикам":
-![Разработчикам](https://raw.githubusercontent.com/carrotquest/ios-sdk/dashly/assets/ApiKeys.png)
+![Разработчикам](https://raw.githubusercontent.com/carrotquest/ios-sdk/master/assets/ApiKeys.png)
 
 Для инициализации Carrot quest вам нужно добавить следующий код в файл AppDelegate вашего приложения:
 
