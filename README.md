@@ -1,8 +1,6 @@
-## Carrot quest для iOS (Beta)
+## Carrot quest для iOS
 
-`Внимание!`Библиотека находится в стадии активной разработки. Возможны сбои в работе.
-
-Carrot quest для iOS поддерживает версию iOS 10 и выше, Swift 4.2, Xcode 10.
+Carrot quest для iOS поддерживает версию iOS 10 и выше, Swift 5.5, Xcode 13.
 
 ## Установка
 На данный момент Carrot quest для iOS можно установить с помощью CocoaPod.
@@ -12,27 +10,6 @@ Carrot quest для iOS поддерживает версию iOS 10 и выше
 ```swift
 pod 'CarrotquestSDK'
 ```
-
-`Внимание`
-Если после подключения бибилотеки вы видите сообщение с ошибкой
-
-    Attempt to use unknown class at 0x265a091a
-или
-
-    *** Incorrect guard value: 10770528256
-    RxSwiftIssue(25384,0x100cbef80) malloc: *** set a breakpoint in malloc_error_break to debug
-
-Вам следует добавить следующий скрипт в Build Phases перед шагом Compile Sources
-```
-sed -i '' 's/\#if DEBUG/\#if FORCE_DEBUG/g' "${PODS_ROOT}/RxSwift/RxSwift/Subjects/AsyncSubject.swift"
-sed -i '' 's/\#if DEBUG/\#if FORCE_DEBUG/g' "${PODS_ROOT}/RxSwift/RxSwift/Subjects/BehaviorSubject.swift"
-sed -i '' 's/\#if DEBUG/\#if FORCE_DEBUG/g' "${PODS_ROOT}/RxSwift/RxSwift/Subjects/PublishSubject.swift"
-sed -i '' 's/\#if DEBUG/\#if FORCE_DEBUG/g' "${PODS_ROOT}/RxSwift/RxSwift/Subjects/ReplaySubject.swift"
-sed -i '' 's/\#if DEBUG/\#if FORCE_DEBUG/g' "${PODS_ROOT}/RxSwift/RxSwift/Observables/Create.swift"
-sed -i '' 's/\#if DEBUG/\#if FORCE_DEBUG/g' "${PODS_ROOT}/RxSwift/RxSwift/Observables/Sink.swift"
-```
-После чего сделать Clean Build
-Подробнее смотри [тут](https://github.com/ReactiveX/RxSwift/issues/1972)
 
 ## Инициализация
 Для работы с Carrot quest для iOS вам понадобится API Key и User Auth Key. Вы можете найти эти ключи на вкладке "Настройки > Разработчикам":
@@ -133,8 +110,12 @@ Carrot.shared.openChat()
 import FirebaseMessaging
 import CarrotSDK
 extension AppDelegate: MessagingDelegate {  
-    func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String) {
-        CarrotNotificationService.shared.setToken(fcmToken)
+    func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
+        if let fcmToken = fcmToken {
+            CarrotNotificationService.shared.setToken(fcmToken)
+        } else {
+            print("Carrotquest SDK error: fcmToken not found")
+        }
         ...
     }
 }
