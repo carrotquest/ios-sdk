@@ -1,10 +1,9 @@
 
-## Dashly for iOS (Beta)
+## Dashly for iOS
 
-`Attention!` Library is a work in progress. Malfunction is possible.
+Dashly for iOS supports iOS 10 and above, Swift 5.5, Xcode 13.
 ​
-Dashly for iOS supports iOS 10 and above, Swift 4.2, Xcode 10.
-​
+
 ## Installation
 At the moment Dashly for iOS can be installed via CocoaPod.
 ​
@@ -14,34 +13,13 @@ Add the following string into the pod file:
 pod 'DashlySDK'
 ```
 
-`Attention`
-
-In case you're seeing any of these error messages after library connection
-​
-    Attempt to use unknown class at 0x265a091a
-or
-​
-    *** Incorrect guard value: 10770528256
-    RxSwiftIssue(25384,0x100cbef80) malloc: *** set a breakpoint in malloc_error_break to debug
-​
-You should add the following script into Build Phase, preceding Compile Sources step
-```
-sed -i '' 's/\#if DEBUG/\#if FORCE_DEBUG/g' "${PODS_ROOT}/RxSwift/RxSwift/Subjects/AsyncSubject.swift"
-sed -i '' 's/\#if DEBUG/\#if FORCE_DEBUG/g' "${PODS_ROOT}/RxSwift/RxSwift/Subjects/BehaviorSubject.swift"
-sed -i '' 's/\#if DEBUG/\#if FORCE_DEBUG/g' "${PODS_ROOT}/RxSwift/RxSwift/Subjects/PublishSubject.swift"
-sed -i '' 's/\#if DEBUG/\#if FORCE_DEBUG/g' "${PODS_ROOT}/RxSwift/RxSwift/Subjects/ReplaySubject.swift"
-sed -i '' 's/\#if DEBUG/\#if FORCE_DEBUG/g' "${PODS_ROOT}/RxSwift/RxSwift/Observables/Create.swift"
-sed -i '' 's/\#if DEBUG/\#if FORCE_DEBUG/g' "${PODS_ROOT}/RxSwift/RxSwift/Observables/Sink.swift"
-```
-After that make a Clean Build
-Detail [here](https://github.com/ReactiveX/RxSwift/issues/1972)
-​
 ## Initialization
 You'll need API Key and User Auth Key to work with Dashly for iOS. Those can be found on Settings - Developers tab:
 ![Developers](https://github.com/carrotquest/ios-sdk/blob/dashly/assets/ApiKeys.png?raw=true)
 ​
 You should add this code into your app's AppDelegate file in order to initialize Dashly:
 ​
+
 ```Swift
 func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey:Any]?) -> Bool {
     ....
@@ -57,7 +35,7 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions lau
 }
 ```
 
-​
+
 ​
 ## User authorization
 
@@ -135,7 +113,11 @@ import FirebaseMessaging
 import DashlySDK
 extension AppDelegate: MessagingDelegate {  
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String) {
-        DashlyNotificationService.shared.setToken(fcmToken)
+        if let fcmToken = fcmToken {
+            DashlyNotificationService.shared.setToken(fcmToken)
+        } else {
+            print("Dashly SDK error: fcmToken not found")
+        }
         ...
     }
 }
@@ -207,7 +189,7 @@ You should now add logic into your Notification Service Extension. A new folder 
 ```swift
 import UserNotifications
 import DashlySDK
-​
+
 class NotificationService: UNNotificationServiceExtension {
     var contentHandler: ((UNNotificationContent) -> Void)?
     var bestAttemptContent: UNMutableNotificationContent?
