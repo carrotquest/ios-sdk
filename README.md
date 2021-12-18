@@ -72,7 +72,7 @@ UserProperty(key: key, value: value, operation: .updateOrCreate)
 
 Для установки [системных свойств](/props#_4) реализовано 2 класса `CarrotUserProperty` и `EcommerceUserProperty`.
 
-##События
+## События
 
 Для отслеживания событий используйте:
 ```Swift
@@ -101,7 +101,7 @@ Carrot.shared.hideButton()
 Carrot.shared.openChat()
 ```
 
-### Уведомления
+## Уведомления
 Для работы с уведомлениями SDK использует сервис Firebase Cloud Messaging. В связи с этим необходимо получить ключ и отправить его в Carrot. Вы можете найти поле для ввода ключа на вкладке Настройки > Разработчикам. Процесс настройки сервиса Firebase Cloud Messaging описан [здесь](https://firebase.google.com/docs/cloud-messaging/ios/client).
 
 Далее, в делегате MessagingDelegate необходимо установить fcmToken для Carrot SDK:
@@ -160,7 +160,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
 }
 ```
 
-### Дублирование уведомлений
+### Дублирование уведомлений и статистика доставленных пушей
 
 Мы используем 2 канала доставки сообщений, поэтому в некоторых случаях уведомления могут дублироваться. Например: при выходе из приложения, или при очень быстром удалении уведомления, возможно получение повтороного уведомления. Для предотвращения такого поведения нужно создать Notification Service Extension. В Xcode, в списке файлов выберите свой проект, а затем File/New/Target/Notification Service Extension.
 
@@ -188,25 +188,12 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
 import UserNotifications
 import CarrotSDK
 
-class NotificationService: UNNotificationServiceExtension {
-    var contentHandler: ((UNNotificationContent) -> Void)?
-    var bestAttemptContent: UNMutableNotificationContent?
-    override func didReceive(_ request: UNNotificationRequest, withContentHandler contentHandler: @escaping (UNNotificationContent) -> Void) {
-        self.contentHandler = contentHandler
-        guard let bestAttemptContent = (request.content.mutableCopy() as? UNMutableNotificationContent) else {
-            return
-        }
-        self.bestAttemptContent = bestAttemptContent
-        let domain = "Identifier зарегистрированный в Apple Developer Portal ранее"
-        CarrotNotificationService.shared.deleteDuplicateNotification(withContent: bestAttemptContent, appGroudDomain: domain)
-        contentHandler(bestAttemptContent)
+class NotificationService: CarrotNotificationServiceExtension {
+    override func setup() {
+        self.apiKey = <api_key>
+        self.domainIdentifier = <group_id>
     }
-    
-    override func serviceExtensionTimeWillExpire() {
-        if let contentHandler = contentHandler, let bestAttemptContent =  bestAttemptContent {
-            contentHandler(bestAttemptContent)
-        }
-    }
+
 }
 ```
 
