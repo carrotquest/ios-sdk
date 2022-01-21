@@ -1,7 +1,7 @@
 
 ## Dashly for iOS
 
-Dashly for iOS supports iOS 10 and above, Swift 5.5, Xcode 13.
+Dashly for iOS supports iOS 13 and above, Swift 5.5.2, Xcode 13.
 ​
 
 ## Installation
@@ -36,7 +36,7 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions lau
 ```
 
 
-​
+
 ## User authorization
 
 In case your application has user authorization, you might want to send user id to Dashly:
@@ -199,7 +199,7 @@ class NotificationService: UNNotificationServiceExtension {
             return
         }
         self.bestAttemptContent = bestAttemptContent
-        let domain = "Identifier зарегистрированный в Apple Developer Portal ранее"
+        let domain = "Identifier previously registered on the Apple Developer Portal"
         DashlyNotificationService.shared.deleteDuplicateNotification(withContent: bestAttemptContent, appGroudDomain: domain)
         contentHandler(bestAttemptContent)
     }
