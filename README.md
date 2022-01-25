@@ -1,6 +1,6 @@
 ## Carrot quest для iOS
 
-Carrot quest для iOS поддерживает версию iOS 10 и выше, Swift 5.5, Xcode 13.
+Carrot quest для iOS поддерживает версию iOS 13 и выше, Swift 5.5.2, Xcode 13.
 
 ## Установка
 На данный момент Carrot quest для iOS можно установить с помощью CocoaPod.
