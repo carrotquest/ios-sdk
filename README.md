@@ -50,6 +50,18 @@ Carrot.shared.auth(
         })
 ```
 
+для реализации функции выхода:
+
+```Swift
+Carrot.shared.logout(
+    successHandler: {
+            print("Carrotquest SDK user auth successed")
+    },
+    errorHandler: { error in
+        print("Carrotquest SDK user auth error: " + error)
+    })
+```
+
 ## Свойства пользователей
 
 Вы можете установить необходимые свойства пользователя с помощью:
@@ -99,6 +111,21 @@ Carrot.shared.hideButton()
 Открыть чат можно также, вызвав из произвольного места (после инициализации) следующий код:
 ```swift
 Carrot.shared.openChat()
+```
+
+### Получение количества непрочтенных диалогов и сообщений
+Для отслеживания количества непрочтенных диалогов:
+```swift
+Carrot.shared.getUnreadConversationsCount({ count in
+    print("Carrotquest SDK dialogs count: \(count)")
+})
+```
+
+и для количества непрочтенных сообщений:
+```swift
+Carrot.shared.getUnreadMessagesCount({ count in
+    print("Carrotquest SDK messages count: \(count)")
+})
 ```
 
 ## Уведомления
@@ -193,7 +220,10 @@ class NotificationService: CarrotNotificationServiceExtension {
         self.apiKey = <api_key>
         self.domainIdentifier = <group_id>
     }
-
+    override func didReceive(_ request: UNNotificationRequest, withContentHandler contentHandler: @escaping (UNNotificationContent) -> Void) {
+        <ваша логика>
+        super.didReceive(request, withContentHandler: contentHandler) 
+    }
 }
 ```
 
