@@ -1,6 +1,6 @@
 ## Carrot quest для iOS
 
-Carrot quest для iOS поддерживает версию iOS 13 и выше, Swift 5.5.2, Xcode 13.
+Carrot quest для iOS поддерживает версию iOS 10 и выше, Swift 5.5, Xcode 13.
 
 ## Установка
 На данный момент Carrot quest для iOS можно установить с помощью CocoaPod.
@@ -50,6 +50,18 @@ Carrot.shared.auth(
         })
 ```
 
+для реализации функции выхода:
+
+```Swift
+Carrot.shared.logout(
+    successHandler: {
+            print("Carrotquest SDK user auth successed")
+    },
+    errorHandler: { error in
+        print("Carrotquest SDK user auth error: " + error)
+    })
+```
+
 ## Свойства пользователей
 
 Вы можете установить необходимые свойства пользователя с помощью:
@@ -72,7 +84,7 @@ UserProperty(key: key, value: value, operation: .updateOrCreate)
 
 Для установки [системных свойств](/props#_4) реализовано 2 класса `CarrotUserProperty` и `EcommerceUserProperty`.
 
-##События
+## События
 
 Для отслеживания событий используйте:
 ```Swift
@@ -101,7 +113,22 @@ Carrot.shared.hideButton()
 Carrot.shared.openChat()
 ```
 
-### Уведомления
+### Получение количества непрочтенных диалогов и сообщений
+Для отслеживания количества непрочтенных диалогов:
+```swift
+Carrot.shared.getUnreadConversationsCount({ count in
+    print("Carrotquest SDK dialogs count: \(count)")
+})
+```
+
+и для количества непрочтенных сообщений:
+```swift
+Carrot.shared.getUnreadMessagesCount({ count in
+    print("Carrotquest SDK messages count: \(count)")
+})
+```
+
+## Уведомления
 Для работы с уведомлениями SDK использует сервис Firebase Cloud Messaging. В связи с этим необходимо получить ключ и отправить его в Carrot. Вы можете найти поле для ввода ключа на вкладке Настройки > Разработчикам. Процесс настройки сервиса Firebase Cloud Messaging описан [здесь](https://firebase.google.com/docs/cloud-messaging/ios/client).
 
 Далее, в делегате MessagingDelegate необходимо установить fcmToken для Carrot SDK:
@@ -160,7 +187,6 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
 }
 ```
 
-
 ### Дублирование уведомлений и статистика доставленных пушей
 
 Мы используем 2 канала доставки сообщений, поэтому в некоторых случаях уведомления могут дублироваться. Например: при выходе из приложения, или при очень быстром удалении уведомления, возможно получение повтороного уведомления. Для предотвращения такого поведения нужно создать Notification Service Extension. В Xcode, в списке файлов выберите свой проект, а затем File/New/Target/Notification Service Extension.
@@ -194,7 +220,10 @@ class NotificationService: CarrotNotificationServiceExtension {
         self.apiKey = <api_key>
         self.domainIdentifier = <group_id>
     }
-
+    override func didReceive(_ request: UNNotificationRequest, withContentHandler contentHandler: @escaping (UNNotificationContent) -> Void) {
+        <ваша логика>
+        super.didReceive(request, withContentHandler: contentHandler) 
+    }
 }
 ```
 
@@ -212,3 +241,4 @@ class NotificationService: CarrotNotificationServiceExtension {
 let domain = "Identifier зарегистрированный в Apple Developer Portal ранее"
 notificationService.show(notification, appGroudDomain: domain, completionHandler: completionHandler)
 ```
+
