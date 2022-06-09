@@ -1,6 +1,7 @@
 ## Carrot quest для iOS
 
-Carrot quest для iOS поддерживает версию iOS 10 и выше, Swift 5.5, Xcode 13.
+![Version](https://img.shields.io/static/v1?label=Version&message=2.6.0&color=brightgreen)
+
 
 ## Установка
 На данный момент Carrot quest для iOS можно установить с помощью CocoaPod.
@@ -105,6 +106,7 @@ Carrot.shared.showButton(in: view)
 Для того чтобы скрыть кнопку возпльзуйтесь методом:
 ```Swift
 Carrot.shared.hideButton()
+<<<<<<< Updated upstream
 ```
 
 ### Открытие чата из произвольного места
@@ -128,6 +130,31 @@ Carrot.shared.getUnreadMessagesCount({ count in
 })
 ```
 
+=======
+```
+
+### Открытие чата из произвольного места
+Открыть чат можно также, вызвав из произвольного места (после инициализации) следующий код:
+```swift
+Carrot.shared.openChat()
+```
+
+### Получение количества непрочтенных диалогов и сообщений
+Для отслеживания количества непрочтенных диалогов:
+```swift
+Carrot.shared.getUnreadConversationsCount({ count in
+    print("Carrotquest SDK dialogs count: \(count)")
+})
+```
+
+и для количества непрочтенных сообщений:
+```swift
+Carrot.shared.getUnreadMessagesCount({ count in
+    print("Carrotquest SDK messages count: \(count)")
+})
+```
+
+>>>>>>> Stashed changes
 ## Уведомления
 Для работы с уведомлениями SDK использует сервис Firebase Cloud Messaging. В связи с этим необходимо получить ключ и отправить его в Carrot. Вы можете найти поле для ввода ключа на вкладке Настройки > Разработчикам. Процесс настройки сервиса Firebase Cloud Messaging описан [здесь](https://firebase.google.com/docs/cloud-messaging/ios/client).
 
@@ -242,3 +269,7 @@ let domain = "Identifier зарегистрированный в Apple Developer
 notificationService.show(notification, appGroudDomain: domain, completionHandler: completionHandler)
 ```
 
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
