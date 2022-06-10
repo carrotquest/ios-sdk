@@ -1,6 +1,6 @@
 ## Carrot quest для iOS
 
-Carrot quest для iOS поддерживает версию iOS 10 и выше, Swift 5.5, Xcode 13.
+![Version](https://img.shields.io/static/v1?label=Version&message=2.6.1-beta1&color=brightgreen)
 
 ## Установка
 На данный момент Carrot quest для iOS можно установить с помощью CocoaPod.
@@ -241,4 +241,5 @@ class NotificationService: CarrotNotificationServiceExtension {
 let domain = "Identifier зарегистрированный в Apple Developer Portal ранее"
 notificationService.show(notification, appGroudDomain: domain, completionHandler: completionHandler)
 ```
+
 
