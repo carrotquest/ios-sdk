@@ -1,7 +1,7 @@
 
 ## Dashly for iOS
 
-Dashly for iOS supports iOS 13 and above, Swift 5.5.2, Xcode 13.
+![Version](https://img.shields.io/static/v1?label=Version&message=2.6.2&color=brightgreen)
 ​
 
 ## Installation
@@ -183,6 +183,16 @@ Add Identifier into Xcode:
 5) An empty App Group identifiers list will be shown in the tab. Add Identifier previously registered on Apple Developer Portal here. 
 ​
 6) Go back to Targets list. Add App Group into your Notification Service Extension. 
+​
+​
+Add next string to SDK init:
+```
+   Dashly.shared.setup(
+   ...
+       withAppGroup: <group_id>,
+   ...
+   )
+```
 ​
 You should now add logic into your Notification Service Extension. A new folder with your Notification Service Extension name should have appeared in the files list. Add code into NotificationService.swift:
 ​
