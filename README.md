@@ -1,7 +1,6 @@
 ## Carrot quest для iOS
 
-![Version](https://img.shields.io/static/v1?label=Version&message=2.6.0&color=brightgreen)
-
+![Version](https://img.shields.io/static/v1?label=Version&message=2.6.1&color=brightgreen)
 
 ## Установка
 На данный момент Carrot quest для iOS можно установить с помощью CocoaPod.
@@ -129,7 +128,6 @@ Carrot.shared.getUnreadMessagesCount({ count in
 })
 ```
 
-
 ## Уведомления
 Для работы с уведомлениями SDK использует сервис Firebase Cloud Messaging. В связи с этим необходимо получить ключ и отправить его в Carrot. Вы можете найти поле для ввода ключа на вкладке Настройки > Разработчикам. Процесс настройки сервиса Firebase Cloud Messaging описан [здесь](https://firebase.google.com/docs/cloud-messaging/ios/client).
 
@@ -211,6 +209,16 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
 
 6) Вернитесь к списку Targets. Аналогичным образом добавте App Group к вашему Notification Service Extension. 
 
+
+Внесите изменения в метод инициализирующий библиотеку:
+```
+   Carrot.shared.setup(
+   ...
+       withAppGroup: <group_id>,
+   ...
+   )
+```
+
 Теперь нужно добавить логику в ваш Notification Service Extension. В списке файлов, должна была появиться новая папка с именем вашего Notification Service Extension. Добавте код в файл NotificationService.swift:
 
 ```swift
@@ -243,3 +251,5 @@ class NotificationService: CarrotNotificationServiceExtension {
 let domain = "Identifier зарегистрированный в Apple Developer Portal ранее"
 notificationService.show(notification, appGroudDomain: domain, completionHandler: completionHandler)
 ```
+
+
