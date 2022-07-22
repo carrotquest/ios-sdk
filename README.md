@@ -1,6 +1,6 @@
 ## Carrot quest для iOS
 
-![Version](https://img.shields.io/static/v1?label=Version&message=2.6.1-beta8&color=brightgreen)
+![Version](https://img.shields.io/static/v1?label=Version&message=2.7.0-beta0&color=brightgreen)
 
 ## Установка
 На данный момент Carrot quest для iOS можно установить с помощью CocoaPod.
@@ -208,6 +208,16 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
 5) На вкладке появится пустой список для идентификаторов App Group. Добавте туда Identifier, который зарегистрировали в Apple Developer Portal ранее. 
 
 6) Вернитесь к списку Targets. Аналогичным образом добавте App Group к вашему Notification Service Extension. 
+
+
+Внесите изменения в метод инициализирующий библиотеку:
+```
+   Carrot.shared.setup(
+   ...
+       withAppGroup: <group_id>,
+   ...
+   )
+```
 
 Теперь нужно добавить логику в ваш Notification Service Extension. В списке файлов, должна была появиться новая папка с именем вашего Notification Service Extension. Добавте код в файл NotificationService.swift:
 
