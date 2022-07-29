@@ -1,6 +1,6 @@
 ## Carrot quest для iOS
 
-![Version](https://img.shields.io/static/v1?label=Version&message=2.7.0-beta2&color=brightgreen)
+![Version](https://img.shields.io/static/v1?label=Version&message=2.7.0-beta5&color=brightgreen)
 
 ## Установка
 На данный момент Carrot quest для iOS можно установить с помощью CocoaPod.
