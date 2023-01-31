@@ -75,14 +75,14 @@ Carrot.shared.setUserProperty(userProperties)
 UserProperty(key: key, value: value)
 UserProperty(key: key, value: value, operation: .updateOrCreate)
 ```
-Более подробно про `Operations` можно прочитать в разделе [«Свойства пользователя»](/props#_3).
+Более подробно про `Operations` можно прочитать в разделе [«Свойства пользователя»](https://developers.carrotquest.io/props/#_3).
 
 `Внимание!`
 
 Поле `key` не может начинаться с символа `$`.
 
 
-Для установки [системных свойств](/props#_4) реализовано 2 класса `CarrotUserProperty` и `EcommerceUserProperty`.
+Для  установки [системных свойств](https://developers.carrotquest.io/props/#_4) реализовано 2 класса `CarrotUserProperty` и `EcommerceUserProperty`.
 
 ## События
 
@@ -251,5 +251,4 @@ class NotificationService: CarrotNotificationServiceExtension {
 let domain = "Identifier зарегистрированный в Apple Developer Portal ранее"
 notificationService.show(notification, appGroudDomain: domain, completionHandler: completionHandler)
 ```
-
 
