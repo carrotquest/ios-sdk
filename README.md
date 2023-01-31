@@ -66,16 +66,16 @@ Where `userProperties` is an object of `[UserProperty]` type.
 UserProperty(key: key, value: value)
 UserProperty(key: key, value: value, operation: .updateOrCreate)
 ```
-More info on `Operations` can be found in [«User properties»](/props#_3) section.
-​
+More info on `Operations` can be found in [«User properties»](https://developers.dashly.io/props/#_3) section.
+
 `Important!`
-​
+
 `key` field value should not start with `$`.
-​
-​
-`CarrotUserProperty` and `EcommerceUProperty` classes should be used to set [system properties](/props#_4).
-​
-​
+
+
+`CarrotUserProperty` and `EcommerceUProperty` classes should be used to set [system properties](https://developers.dashly.io/props/#_4).
+
+
 Use the following method for events tracking:
 ```Swift
 Dashly.shared.trackEvent(withName: name, withParams: params)
@@ -193,7 +193,7 @@ Add next string to SDK init:
    ...
    )
 ```
-​
+
 You should now add logic into your Notification Service Extension. A new folder with your Notification Service Extension name should have appeared in the files list. Add code into NotificationService.swift:
 ​
 ```swift
