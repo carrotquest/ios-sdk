@@ -1,6 +1,6 @@
 ## Carrot quest для iOS
 
-![Version](https://img.shields.io/static/v1?label=Version&message=2.8.3-beta1&color=brightgreen)
+![Version](https://img.shields.io/static/v1?label=Version&message=2.8.3-beta2&color=brightgreen)
 
 ## Установка
 На данный момент Carrot quest для iOS можно установить с помощью CocoaPod.
@@ -75,14 +75,14 @@ Carrot.shared.setUserProperty(userProperties)
 UserProperty(key: key, value: value)
 UserProperty(key: key, value: value, operation: .updateOrCreate)
 ```
-Более подробно про `Operations` можно прочитать в разделе [«Свойства пользователя»](/props#_3).
+Более подробно про `Operations` можно прочитать в разделе [«Свойства пользователя»](https://developers.carrotquest.io/props/#_3).
 
 `Внимание!`
 
 Поле `key` не может начинаться с символа `$`.
 
 
-Для установки [системных свойств](/props#_4) реализовано 2 класса `CarrotUserProperty` и `EcommerceUserProperty`.
+Для установки [системных свойств](https://developers.carrotquest.io/props/#_4) реализовано 2 класса `CarrotUserProperty` и `EcommerceUserProperty`.
 
 ## События
 
