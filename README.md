@@ -1,7 +1,7 @@
 
 ## Dashly for iOS
 
-![Version](https://img.shields.io/static/v1?label=Version&message=2.8.3&color=brightgreen)
+![Version](https://img.shields.io/static/v1?label=Version&message=2.8.5&color=brightgreen)
 ​
 
 ## Installation
