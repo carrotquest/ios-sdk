@@ -1,10 +1,30 @@
 
 ## Dashly for iOS
 
-![Version](https://img.shields.io/static/v1?label=Version&message=2.8.9&color=brightgreen)
+![Version](https://img.shields.io/static/v1?label=Version&message=2.9.0&color=brightgreen)
 ​
 
+## Table of Contents
+
+- [Installation](#setup_pods)
+- [Swift](#swift)
+  - [Initialization](#init_swift)
+  - [User authorization](#auth_swift)
+  - [User properties and events](#prop_swift)
+  - [Live chat](#chat_swift)
+  - [Notifications](#notif_swift)
+- [Objective-C](#init_objc)
+  - [Initialization](#init_objc)
+  - [User authorization](#auth_objc)
+  - [User properties and events](#prop_objc)
+  - [Live chat](#chat_objc)
+  - [Notifications](#notif_objc)
+- [Double notifications](#notif_extension)
+
+<a name="setup_pods"></a>
+
 ## Installation
+
 At the moment Dashly for iOS can be installed via CocoaPod.
 ​
 ## CocoaPods
@@ -15,8 +35,14 @@ pod 'DashlySDK'
 
 ## Initialization
 You'll need API Key and User Auth Key to work with Dashly for iOS. Those can be found on Settings - Developers tab:
-![Developers](https://github.com/carrotquest/ios-sdk/blob/dashly/assets/ApiKeys.png?raw=true)
-​
+![Developers](https://github.com/carrotquest/ios-sdk/blob/dashly/assets/ApiKeys.png?raw=true)<a name="swift"></a>
+
+# Swift
+
+<a name="init_swift"></a>
+
+## Initialization
+
 You should add this code into your app's AppDelegate file in order to initialize Dashly:
 ​
 
@@ -37,21 +63,37 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions lau
 
 
 
+<a name="auth_swift"></a>
+
 ## User authorization
 
 In case your application has user authorization, you might want to send user id to Dashly:
-​
+
 ```Swift
 Dashly.shared.auth(
     withUserId: userId, 
     withUserAuthKey: userAuthKey,
         successHandler: {
-                print("Dashly SDK user auth successed")
+            print("Dashly SDK user auth successed")
         },
         errorHandler: { error in
             print("Dashly SDK user auth error: " + error)
         })
 ```
+
+to realize the logout function:
+
+```Swift
+Dashly.shared.logout(
+    successHandler: {
+        print("Dashly SDK user logout successed")
+    },
+    errorHandler: { error in
+        print("Dashly SDK user logout error: " + error)
+    })
+```
+
+<a name="prop_swift"></a>
 
 ## User properties and events
 
@@ -62,6 +104,7 @@ Dashly.shared.setUserProperty(userProperties)
 Where `userProperties` is an object of `[UserProperty]` type.
 ​
 `UserProperty` class should be used for user properties description:
+
 ```Swift
 UserProperty(key: key, value: value)
 UserProperty(key: key, value: value, operation: .updateOrCreate)
@@ -73,21 +116,24 @@ More info on `Operations` can be found in [«User properties»](https://develope
 `key` field value should not start with `$`.
 ​
 ​
-`CarrotUserProperty` and `EcommerceUProperty` classes should be used to set [system properties](https://developers.dashly.io/props/#_4).
+`DashlyUserProperty` and `EcommerceUProperty` classes should be used to set [system properties](https://developers.dashly.io/props/#_4).
 ​
 ​
 Use the following method for events tracking:
+
 ```Swift
 Dashly.shared.trackEvent(withName: name, withParams: params)
 ```
 where `params` is a JSON string with additional set of event parameters
 ​
+
+<a name="chat_swift"></a>
+
 ## Live chat
+
 You can give your users an opportunity to start a live chat (with your operator) from anywhere. This can be done two ways - either by adding a floating button or by directly calling a chat openning method at desired moment.
-​
 ### Floating Button
 You can use the following method to add chat button:
-​
 ```Swift
 Dashly.shared.showButton(in: view)
 ```
@@ -103,11 +149,15 @@ After initialization you can open chat from any place using thix method:
 Dashly.shared.openChat()
 ```
 
-### Notofications
+<a name="notif_swift"></a>
+
+## Notifications
+
 SDK uses Firebase Cloud Messaging for sending notifications. At the moment you are required to get a key and send it to our support. You can find an input for this key at "Settings" - "Developers" tab of Dashly admin panel. Cloud Messaging setup is described [here](https://firebase.google.com/docs/cloud-messaging/ios/client).
 ​
 fcmToken for Dashly SDK should be set in MessagingDelegate next:
 ​
+
 ```swift
 import FirebaseMessaging
 import DashlySDK
@@ -162,7 +212,225 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
 }
 ```
 
-### Double notifications
+<a name="init_objc"></a>
+
+# Objective-C
+
+## Initialization
+
+You should add this code into your app's AppDelegate file in order to initialize Dashly:
+​
+
+```objective-c
+#import "DashlySDK/DashlySDK.h"
+
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+  	....
+    Dashly *dashly = [Dashly shared];
+    [
+        dashly
+        setupWithApiKey: API-KEY
+        successHandler: ^(){
+            NSLog(@"Dashly SDK connected");
+        }
+        errorHandler: ^(NSString *error){
+            NSLog(@"Dashly SDK error: %@", error);
+    }];
+  	....
+    return YES;
+}
+```
+
+
+
+<a name="auth_objc"></a>
+
+## User authorization
+
+In case your application has user authorization, you might want to send user id to Dashly:
+
+```objective-c
+Dashly *dashly = [Dashly shared];
+[
+  dashly
+  authWithUserId: userId
+  withUserAuthKey: userAuthKey
+  successHandler: ^(){
+      NSLog(@"Dashly SDK user auth successed");
+  }
+  errorHandler: ^(NSString *error){
+      NSLog(@"Dashly SDK user auth error: %@", error);
+}];
+```
+
+to realize the logout function:
+
+```objective-c
+Dashly *dashly = [Dashly shared];
+[
+  dashly
+  logoutWithSuccessHandler: ^(){
+     NSLog(@"Dashly SDK user logout successed");
+  } errorHandler: ^(NSString *error){
+     NSLog(@"Dashly SDK user logout error: %@", error);
+}];
+```
+
+<a name="prop_objc"></a>
+
+## User properties and events
+
+You can set user properties, using this method:
+
+```objective-c
+Dashly *dashly = [Dashly shared];
+[
+  dashly
+  setUserProperty:userProperties
+];
+```
+
+Where `userProperties` is an object of `[UserProperty]` type.
+​
+`UserProperty` class should be used for user properties description:
+
+```objective-c
+Dashly *dashly = [Dashly shared];
+UserProperty *userProp = [[UserProperty alloc] initWithKey: key value: value];
+UserProperty *userProp = [[UserProperty alloc] initWithKey: key value: value operation: @"updateOrCreate"];
+```
+
+More info on `Operations` can be found in [«User properties»](https://developers.dashly.io/props/#_3) section.
+​
+`Important!`
+​
+`key` field value should not start with `$`.
+​
+​
+`DashlyUserProperty` and `EcommerceUProperty` classes should be used to set [system properties](https://developers.dashly.io/props/#_4).
+​
+​
+Use the following method for events tracking:
+
+```objective-c
+Dashly *dashly = [Dashly shared];
+[
+  dashly
+  trackEventWithName: name
+  withParams: params
+];
+```
+
+where `params` is a JSON string with additional set of event parameters
+​
+
+<a name="chat_objc"></a>
+
+## Live chat
+
+You can give your users an opportunity to start a live chat (with your operator) from anywhere. This can be done two ways - either by adding a floating button or by directly calling a chat openning method at desired moment.
+​
+
+### Floating Button
+
+You can use the following method to add chat button:
+
+```objective-c
+Dashly *dashly = [Dashly shared];
+[dashly showButtonIn: self.view];
+```
+
+Use this method to hide chat button:
+
+```objective-c
+Dashly *dashly = [Dashly shared];
+[dashly hideButton];
+```
+
+### Open chat from anywhere
+
+After initialization you can open chat from any place using thix method:
+
+```objective-c
+Dashly *dashly = [Dashly shared];
+[dashly openChat];
+```
+
+### Getting the number of unread dialogs and messages
+
+To keep track of the number of unread dialogs:
+
+```objective-c
+Dashly *dashly = [Dashly shared];
+[
+  dashly
+  getUnreadConversationsCount:^(NSInteger count){
+		NSLog(@"Dashly SDK dialogs count: %ld", (long)count);
+}];
+```
+
+and for the number of unread messages:
+
+```objective-c
+Dashly *dashly = [Dashly shared];
+[
+  dashly
+  getUnreadMessagesCount:^(NSInteger count){
+		NSLog(@"Dashly SDK dialogs count: %ld", (long)count);
+}];
+```
+
+<a name="notif_objc"></a>
+
+## Notifications
+
+SDK uses Firebase Cloud Messaging for sending notifications. At the moment you are required to get a key and send it to our support. You can find an input for this key at "Settings" - "Developers" tab of Dashly admin panel. Cloud Messaging setup is described [here](https://firebase.google.com/docs/cloud-messaging/ios/client).
+​
+fcmToken for Dashly SDK should be set in MessagingDelegate next:
+
+```objective-c
+#import "DashlySDK/DashlySDK.h"
+#import <Firebase.h>
+
+- (void)messaging:(FIRMessaging *)messaging didReceiveRegistrationToken:(NSString *)fcmToken {
+    DashlyNotificationService *service = [DashlyNotificationService shared];
+    [service setToken: fcmToken];
+}
+```
+
+Add this code into UNUserNotificationCenterDelegate to display notifications:
+
+```objective-c
+- (void)userNotificationCenter:(UNUserNotificationCenter *)center
+       willPresentNotification:(UNNotification *)notification
+         withCompletionHandler:(void (^)(UNNotificationPresentationOptions options))completionHandler {
+    DashlyNotificationService *service = [DashlyNotificationService shared];
+    if ([service canHandle:notification]) {
+        [service show:notification appGroudDomain:nil completionHandler:completionHandler];
+    } else {
+        // user notifications logic
+    }
+}
+```
+
+Use this for handling clicks on notifications:
+
+```objective-c
+- (void)userNotificationCenter:(UNUserNotificationCenter *)center
+didReceiveNotificationResponse:(UNNotificationResponse *)response
+         withCompletionHandler:(void(^)(void))completionHandler {
+    DashlyNotificationService *service = [DashlyNotificationService shared];
+    if ([service canHandleWithResponse:response]) {
+        [service clickNotificationWithNotificationResponse:response appGroudDomain:nil];
+    } else {
+        // user notifications logic
+    }
+}
+```
+
+<a name="notif_extension"></a>
+
+## Double notifications
 
 We're delivering messagis via 2 channels, thus same notification can be received twice. Examples: when logging out or quickly deleting a notification there is a possibility of getting the same notification. Notification Service Extension should be created to prevent such behaviour. Choose your project in files list of Xcode, then File/New/Target/Notification Service Extension.
 
@@ -172,6 +440,7 @@ Add Identifier into Xcode:
 ​
 ![AppGroup](https://github.com/carrotquest/ios-sdk/blob/dashly/assets/AppGroup.png?raw=true)
 ​
+
 1) Choose your project in the files list. 
 ​
 2) Choose your project's name in targets list. 
@@ -193,7 +462,7 @@ Add next string to SDK init:
    ...
    )
 ```
-​
+
 You should now add logic into your Notification Service Extension. A new folder with your Notification Service Extension name should have appeared in the files list. Add code into NotificationService.swift:
 ​
 ```swift
