@@ -1,8 +1,31 @@
 ## Carrot quest для iOS
 
-![Version](https://img.shields.io/static/v1?label=Version&message=2.8.9&color=brightgreen)
+![Version](https://img.shields.io/static/v1?label=Version&message=2.9.0-beta0&color=brightgreen)
+
+## Содержание
+
+- [Уставнока](#setup_pods)
+- [Swift](#swift)
+  - [Инициализация](#init_swift)
+  - [Авторизация пользователей](#auth_swift)
+  - [Свойства пользователей](#prop_swift)
+  - [События](#event_swift)
+  - [Чат с оператором](#chat_swift)
+  - [Уведомления](#notif_swift)
+- [Objective-c](#init_objc)
+  - [Инициализация](#init_objc)
+  - [Авторизация пользователей](#auth_objc)
+  - [Свойства пользователей](#prop_objc)
+  - [События](#event_objc)
+  - [Чат с оператором](#chat_objc)
+  - [Уведомления](#notif_objc)
+- [Дублирование уведомлений и статистика доставленных пушей](#notif_extension)
+- [Локализация](#localization)
+
+<a name="setup_pods"></a>
 
 ## Установка
+
 На данный момент Carrot quest для iOS можно установить с помощью CocoaPod.
 
 ## CocoaPods
@@ -15,13 +38,23 @@ pod 'CarrotquestSDK'
 Для работы с Carrot quest для iOS вам понадобится API Key и User Auth Key. Вы можете найти эти ключи на вкладке "Настройки > Разработчикам":
 ![Разработчикам](https://raw.githubusercontent.com/carrotquest/ios-sdk/master/assets/ApiKeys.png)
 
+<a name="swift"></a>
+
+# Swift
+
+<a name="init_swift"></a>
+
+## Инициализация
+
 Для инициализации Carrot quest вам нужно добавить следующий код в файл AppDelegate вашего приложения:
 
 ```Swift
+import CarrotSDK
+
 func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey:Any]?) -> Bool {
     ....
     Carrot.shared.setup(
-        withApiKey: key,
+        withApiKey: API-KEY,
         successHandler: {
                 print("Carrotquest SDK connected")
         },
@@ -32,7 +65,7 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions lau
 }
 ```
 
-
+<a name="auth_swift"></a>
 
 ## Авторизация пользователей
 
@@ -55,12 +88,14 @@ Carrot.shared.auth(
 ```Swift
 Carrot.shared.logout(
     successHandler: {
-            print("Carrotquest SDK user auth successed")
+            print("Carrotquest SDK user logout successed")
     },
     errorHandler: { error in
-        print("Carrotquest SDK user auth error: " + error)
+        print("Carrotquest SDK user logout error: " + error)
     })
 ```
+
+<a name="prop_swift"></a>
 
 ## Свойства пользователей
 
@@ -84,6 +119,8 @@ UserProperty(key: key, value: value, operation: .updateOrCreate)
 
 Для установки [системных свойств](https://developers.carrotquest.io/props/#_4) реализовано 2 класса `CarrotUserProperty` и `EcommerceUserProperty`.
 
+<a name="event_swift"></a>
+
 ## События
 
 Для отслеживания событий используйте:
@@ -92,7 +129,10 @@ Carrot.shared.trackEvent(withName: name, withParams: params)
 ```
 где `params` &mdash; дополнительные параметры для события в виде JSON-строки.
 
+<a name="chat_swift"></a>
+
 ## Чат с оператором
+
 Вы можете дать пользователю мобильного приложения возможность перейти в чат с оператором из любого места. Это можно реализовать двумя разными путями - через плавающую кнопку, либо напрямую вызвав метод открытия чата в любое нужное время.
 
 ### Плавающая кнопка (Floating Button)
@@ -128,7 +168,10 @@ Carrot.shared.getUnreadMessagesCount({ count in
 })
 ```
 
+<a name="notif_swift"></a>
+
 ## Уведомления
+
 Для работы с уведомлениями SDK использует сервис Firebase Cloud Messaging. В связи с этим необходимо получить ключ и отправить его в Carrot. Вы можете найти поле для ввода ключа на вкладке Настройки > Разработчикам. Процесс настройки сервиса Firebase Cloud Messaging описан [здесь](https://firebase.google.com/docs/cloud-messaging/ios/client).
 
 Далее, в делегате MessagingDelegate необходимо установить fcmToken для Carrot SDK:
@@ -187,7 +230,228 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
 }
 ```
 
-### Дублирование уведомлений и статистика доставленных пушей
+<a name="init_objc"></a>
+
+# Objective-c
+
+<a name="init_objc"></a>
+
+## Инициализация
+
+Для инициализации Carrot quest вам нужно добавить следующий код в файл AppDelegate вашего приложения:
+
+```objective-c
+#import "CarrotSDK/CarrotSDK.h"
+
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+  	....
+    Carrot *carrot = [Carrot shared];
+    [
+        carrot
+        setupWithApiKey: API-KEY
+        successHandler: ^(){
+            NSLog(@"Carrotquest SDK connected");
+        }
+        errorHandler: ^(NSString *error){
+            NSLog(@"Carrotquest SDK error: %@", error);
+    }];
+  	....
+    return YES;
+}
+```
+
+<a name="auth_objc"></a>
+
+## Авторизация пользователей
+
+Если в вашем приложении присутствует авторизация пользователей, вы можете передать ID пользователя в Carrot quest:
+
+```objective-c
+Carrot *carrot = [Carrot shared];
+[
+  carrot
+  authWithUserId: userId
+  withUserAuthKey: userAuthKey
+  successHandler: ^(){
+      NSLog(@"Carrotquest SDK user auth successed");
+  }
+  errorHandler: ^(NSString *error){
+      NSLog(@"Carrotquest SDK user auth error: %@", error);
+}];
+```
+
+для реализации функции выхода:
+
+```objective-c
+Carrot *carrot = [Carrot shared];
+[
+  carrot
+  logoutWithSuccessHandler: ^(){
+     NSLog(@"Carrotquest SDK user logout successed");
+  } errorHandler: ^(NSString *error){
+     NSLog(@"Carrotquest SDK user logout error: %@", error);
+}];
+```
+
+<a name="prop_objc"></a>
+
+## Свойства пользователей
+
+Вы можете установить необходимые свойства пользователя с помощью:
+
+```objective-c
+Carrot *carrot = [Carrot shared];
+[
+  carrot
+  setUserProperty:userProperties
+]
+```
+
+Где `userProperties` это объект типа `[UserProperty]`.
+
+Для описания свойств пользователя используйте класс `UserProperty`:
+
+```objective-c
+Carrot *carrot = [Carrot shared];
+UserProperty *userProp = [[UserProperty alloc] initWithKey: key value: value];
+UserProperty *userProp = [[UserProperty alloc] initWithKey: key value: value operation: @"updateOrCreate"];
+```
+
+Более подробно про `Operations` можно прочитать в разделе [«Свойства пользователя»](https://developers.carrotquest.io/props/#_3).
+
+`Внимание!`
+
+Поле `key` не может начинаться с символа `$`.
+
+
+Для установки [системных свойств](https://developers.carrotquest.io/props/#_4) реализовано 2 класса `CarrotUserProperty` и `EcommerceUserProperty`.
+
+<a name="event_objc"></a>
+
+## События
+
+Для отслеживания событий используйте:
+
+```objective-c
+Carrot *carrot = [Carrot shared];
+[
+  carrot
+  trackEventWithName: name
+  withParams: params
+];
+```
+
+где `params` &mdash; дополнительные параметры для события в виде JSON-строки.
+
+<a name="chat_objc"></a>
+
+## Чат с оператором
+
+Вы можете дать пользователю мобильного приложения возможность перейти в чат с оператором из любого места. Это можно реализовать двумя разными путями - через плавающую кнопку, либо напрямую вызвав метод открытия чата в любое нужное время.
+
+### Плавающая кнопка (Floating Button)
+
+Виджет предоставляющий быстрый доступ к чату. Добавить кнопку можно с помощью следующего метода:
+
+```objective-c
+Carrot *carrot = [Carrot shared];
+[carrot showButtonIn: self.view];
+```
+
+Для того чтобы скрыть кнопку возпльзуйтесь методом:
+
+```objective-c
+Carrot *carrot = [Carrot shared];
+[carrot hideButton];
+```
+
+### Открытие чата из произвольного места
+
+Открыть чат можно также, вызвав из произвольного места (после инициализации) следующий код:
+
+```objective-c
+Carrot *carrot = [Carrot shared];
+[carrot openChat];
+```
+
+### Получение количества непрочтенных диалогов и сообщений
+
+Для отслеживания количества непрочтенных диалогов:
+
+```objective-c
+Carrot *carrot = [Carrot shared];
+[
+  carrot
+  getUnreadConversationsCount:^(NSInteger count){
+		NSLog(@"Carrotquest SDK dialogs count: %ld", (long)count);
+}];
+```
+
+и для количества непрочтенных сообщений:
+
+```objective-c
+Carrot.shared.getUnreadMessagesCount({ count in
+    print("Carrotquest SDK messages count: \(count)")
+})
+Carrot *carrot = [Carrot shared];
+[
+  carrot
+  getUnreadMessagesCount:^(NSInteger count){
+		NSLog(@"Carrotquest SDK dialogs count: %ld", (long)count);
+}];
+```
+
+<a name="notif_objc"></a>
+
+## Уведомления
+
+Для работы с уведомлениями SDK использует сервис Firebase Cloud Messaging. В связи с этим необходимо получить ключ и отправить его в Carrot. Вы можете найти поле для ввода ключа на вкладке Настройки > Разработчикам. Процесс настройки сервиса Firebase Cloud Messaging описан [здесь](https://firebase.google.com/docs/cloud-messaging/ios/client).
+
+Далее, в делегате MessagingDelegate необходимо установить fcmToken для Carrot SDK:
+
+```objective-c
+#import "CarrotSDK/CarrotSDK.h"
+#import <Firebase.h>
+
+- (void)messaging:(FIRMessaging *)messaging didReceiveRegistrationToken:(NSString *)fcmToken {
+    CarrotNotificationService *service = [CarrotNotificationService shared];
+    [service setToken: fcmToken];
+}
+```
+
+Для отображения уведомлений, необходимо добавить код в AppDelegate:
+
+```objective-c
+- (void)userNotificationCenter:(UNUserNotificationCenter *)center
+       willPresentNotification:(UNNotification *)notification
+         withCompletionHandler:(void (^)(UNNotificationPresentationOptions options))completionHandler {
+    CarrotNotificationService *service = [CarrotNotificationService shared];
+    if ([service canHandle:notification]) {
+        [service show:notification appGroudDomain:nil completionHandler:completionHandler];
+    } else {
+        // Логика для пользовательских уведомлений
+    }
+}
+```
+
+Для обработки кликов на уведомления:
+
+```objective-c
+- (void)userNotificationCenter:(UNUserNotificationCenter *)center
+didReceiveNotificationResponse:(UNNotificationResponse *)response
+         withCompletionHandler:(void(^)(void))completionHandler {
+    CarrotNotificationService *service = [CarrotNotificationService shared];
+    if ([service canHandleWithResponse:response]) {
+        [service clickNotificationWithNotificationResponse:response appGroudDomain:nil];
+    } else {
+        // Логика для пользовательских уведомлений
+    }
+}
+```
+
+<a name="notif_extension"></a>
+
+## Дублирование уведомлений и статистика доставленных пушей
 
 Мы используем 2 канала доставки сообщений, поэтому в некоторых случаях уведомления могут дублироваться. Например: при выходе из приложения, или при очень быстром удалении уведомления, возможно получение повтороного уведомления. Для предотвращения такого поведения нужно создать Notification Service Extension. В Xcode, в списке файлов выберите свой проект, а затем File/New/Target/Notification Service Extension.
 
@@ -252,4 +516,10 @@ let domain = "Identifier зарегистрированный в Apple Developer
 notificationService.show(notification, appGroudDomain: domain, completionHandler: completionHandler)
 ```
 
+<a name="localization"></a>
 
+## Локализация
+
+Для того, чтобы SDK автоматически подтягивал и русскую локализацию, кроме стандартной, английской, необходимо убедиться, что в Xcode проекте такая локализация включена. 
+
+![Локализация](https://raw.githubusercontent.com/carrotquest/ios-sdk/master/assets/Localozations.png)
