@@ -12,7 +12,7 @@
   - [События](#event_swift)
   - [Чат с оператором](#chat_swift)
   - [Уведомления](#notif_swift)
-- [Objective-c](#init_objc)
+- [Objective-C](#init_objc)
   - [Инициализация](#init_objc)
   - [Авторизация пользователей](#auth_objc)
   - [Свойства пользователей](#prop_objc)
@@ -232,7 +232,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
 
 <a name="init_objc"></a>
 
-# Objective-c
+# Objective-C
 
 <a name="init_objc"></a>
 
