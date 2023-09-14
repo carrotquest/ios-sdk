@@ -20,6 +20,7 @@
   - [Live chat](#chat_objc)
   - [Notifications](#notif_objc)
 - [Double notifications](#notif_extension)
+- [Xcode 15](#xcode15)
 
 <a name="setup_pods"></a>
 
@@ -505,3 +506,28 @@ Lastly, send Identifier previously registered on Apple Developer Portal into sho
 let domain = "Identifier previously registered on Apple Developer Portal"
 notificationService.show(notification, appGroudDomain: domain, completionHandler: completionHandler)
 ```
+
+<a name="xcode15"></a>
+
+## Xcode 15
+
+If you are using Xcode 15 and above, and CocoaPods 1.12.1 and below, you will get a directory error like this:
+
+![Xcode](https://raw.githubusercontent.com/carrotquest/ios-sdk/master/assets/ErrorXcode15.png)
+
+To fix this, add the following code to the end of your podfile:
+
+```ruby
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    target.build_configurations.each do |config|
+      if config.base_configuration_reference.is_a? Xcodeproj::Project::Object::PBXFileReference
+        xcconfig_path = config.base_configuration_reference.real_path
+        IO.write(xcconfig_path, IO.read(xcconfig_path).gsub("DT_TOOLCHAIN_DIR", "TOOLCHAIN_DIR"))
+      end
+    end
+  end
+end
+```
+
+Perhaps in the future, CocoaPods will be updated and this code will have to be removed, but for now, it is necessary.
