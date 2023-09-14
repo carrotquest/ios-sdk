@@ -21,6 +21,7 @@
   - [Уведомления](#notif_objc)
 - [Дублирование уведомлений и статистика доставленных пушей](#notif_extension)
 - [Локализация](#localization)
+- [Xcode 15](#xcode15)
 
 <a name="setup_pods"></a>
 
@@ -523,3 +524,28 @@ notificationService.show(notification, appGroudDomain: domain, completionHandler
 Для того, чтобы SDK автоматически подтягивал и русскую локализацию, кроме стандартной, английской, необходимо убедиться, что в Xcode проекте такая локализация включена. 
 
 ![Локализация](https://raw.githubusercontent.com/carrotquest/ios-sdk/master/assets/Localozations.png)
+
+<a name="xcode15"></a>
+
+## Xcode 15
+
+Если вы используете Xcode 15 и выше, и CocoaPods 1.12.1 и ниже, то у вас возникнет ошибка директорий, вроде такой:
+
+![Локализация](https://raw.githubusercontent.com/carrotquest/ios-sdk/master/assets/ErrorXcode15.png)
+
+Чтобы исправить это, добавьте следующий код в конец своего podfile:
+
+```ruby
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    target.build_configurations.each do |config|
+      if config.base_configuration_reference.is_a? Xcodeproj::Project::Object::PBXFileReference
+        xcconfig_path = config.base_configuration_reference.real_path
+        IO.write(xcconfig_path, IO.read(xcconfig_path).gsub("DT_TOOLCHAIN_DIR", "TOOLCHAIN_DIR"))
+      end
+    end
+  end
+end
+```
+
+Возможно, в будущем, CocoaPods обновится, и этот код придется удалить, но в данный момент, он необходим. 
