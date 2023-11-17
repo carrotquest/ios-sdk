@@ -1,7 +1,7 @@
 
 ## Dashly for iOS
 
-![Version](https://img.shields.io/static/v1?label=Version&message=2.10.0&color=brightgreen)
+![Version](https://img.shields.io/static/v1?label=Version&message=2.10.1&color=brightgreen)
 ​
 
 ## Table of Contents
