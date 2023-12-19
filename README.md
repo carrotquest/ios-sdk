@@ -1,6 +1,6 @@
 ## Carrot quest для iOS
 
-![Version](https://img.shields.io/static/v1?label=Version&message=2.10.2&color=brightgreen)
+![Version](https://img.shields.io/static/v1?label=Version&message=2.9.0-beta0&color=brightgreen)
 
 ## Содержание
 
@@ -22,6 +22,7 @@
 - [Дублирование уведомлений и статистика доставленных пушей](#notif_extension)
 - [Локализация](#localization)
 - [Xcode 15](#xcode15)
+- [Использование ссылок в пушах](#Push+link) 
 
 <a name="setup_pods"></a>
 
@@ -549,3 +550,135 @@ end
 ```
 
 Возможно, в будущем, CocoaPods обновится, и этот код придется удалить, но в данный момент, он необходим. 
+
+<a name="Push+link"></a>
+
+## Использование ссылок в пушах
+
+Небольшой словарь терминов, перед тем как мы начнем:
+
+Universal link (еще его называют Deeplink, но это не терминология Apple):
+
+```html
+https://example.com/section
+```
+
+URL scheme:
+
+```html
+example://section
+```
+
+Итак, вы можете приложить ссылку к пушу. 
+
+![PushLink](https://raw.githubusercontent.com/carrotquest/ios-sdk/master/assets/Push1.png)
+
+Однако, не все так просто. Внутри обработчика пуша лежит функция:
+
+```swift
+if let clickActionUrl = URL(string: "Ваша ссылка") {
+		UIApplication.shared.open(clickActionUrl, options: [:])
+}
+```
+
+Простейшая логика. Однако, по какой-то причине, функция iOS для открытия ссылок, указанная выше, не распознает универсальную ссылку приложения, если она вызывается из этого же приложения. Это отправит пользователя прямо в браузер.
+
+Поэтому, есть два возможных варианта решения проблемы:
+
+1. URL Scheme
+2. Ручная обработка Universal link
+
+-----
+
+1. URL Scheme
+
+Если в вашем приложении настроены URL Scheme то все уже готово. Просто приложите нужную схему к пушу. 
+
+Далее прикладываю небольшой туториал по настройке URL Scheme.
+
+URL Scheme - это более простой и надежный способ открыть нужную страницу в приложении, в отличии от Universal Link. Однако, они не выглядят как ссылка из интернета:
+
+```html
+deeplink://test
+```
+
+Перейдем к настройке. Выберите цель в настройках проекта Xcode и перейдите на вкладку «Информация». Внизу страницы вы найдете раздел «URL Types».
+
+![URL_scheme](https://raw.githubusercontent.com/carrotquest/ios-sdk/master/assets/Push2.png)
+
+Нажав `+`, мы можем создать новый тип. В качестве идентификатора люди часто повторно используют пакет приложения. Для схем URL-адресов мы рекомендуем использовать название приложения (или сокращенное название), чтобы оно было как можно более кратким. В нем не должно быть никаких специальных символов. Мы будем использовать `deeplink` в качестве примера.
+
+Ваше приложение готово распознать URL схему, теперь нам нужно обработать его, когда мы его получим.
+
+Приложение фиксирует открытие следующим образом в более ранних приложениях, в которых есть только `AppDelegate`.
+
+```swift
+extension AppDelegate {
+
+    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any]) -> Bool {
+
+        print(url)
+        return true
+    }
+}
+```
+
+Для новых приложений, включающих SceneDelegate, необходимо добавить обработчик еще и туда. Важно отметить, что метод AppDelegateне будет вызван, даже если вы его реализуете.
+
+```swift
+extension SceneDelegate {
+    func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
+        guard let firstUrl = URLContexts.first?.url else {
+            return
+        }
+
+        print(firstUrl.absoluteString)
+    }
+}
+```
+
+Если хотите проверить ссылку, введите ее в браузере Safari. Так же, доступен вариант для быстрой проверки на симуляторе. Вот команда для терминала: 
+
+```bash
+xcrun simctl openurl booted "deeplink://test"
+```
+
+2. Ручная обработка Universal link
+
+Вернитесь к обработчику кликов на пуши, и передайте аргумент false в параметр openLink:
+
+```swift
+CarrotNotificationService.shared.clickNotification(
+		notificationResponse: response,
+		openLink: false
+)
+```
+
+Затем, нужно достать ссылку из объекта response, который пришел в пуше. Мы заранее подготовили для этого функцию:
+
+```swift
+let link: String? = CarrotNotificationService.shared.getLink(from: response)
+```
+
+Обратите внимание, что функция возвращает опционал, потому что пуш не всегда содержит ссылку.
+
+Таким образом, в методе обработки кликов на пуши, у вас получится что-то такое:
+
+```swift
+import CarrotSDK
+extension AppDelegate: UNUserNotificationCenterDelegate {
+    func userNotificationCenter(
+        _ center: UNUserNotificationCenter,
+        didReceive response: UNNotificationResponse,
+        withCompletionHandler completionHandler: @escaping () -> Void) {
+        let notificationService = CarrotNotificationService.shared
+        if notificationService.canHandle(response) {
+            notificationService.clickNotification(notificationResponse: response, openLink: false)
+						if let link = CarrotNotificationService.shared.getLink(from: response) {
+								print(link)
+								// Обработчик открытия Universal link
+        }
+        completionHandler()
+    }
+}
+```
