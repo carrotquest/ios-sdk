@@ -1,6 +1,6 @@
 ## Carrot quest для iOS
 
-![Version](https://img.shields.io/static/v1?label=Version&message=2.9.0-beta0&color=brightgreen)
+![Version](https://img.shields.io/static/v1?label=Version&message=2.10.3&color=brightgreen)
 
 ## Содержание
 
