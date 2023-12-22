@@ -1,6 +1,6 @@
 ## Carrot quest для iOS
 
-![Version](https://img.shields.io/static/v1?label=Version&message=2.10.3&color=brightgreen)
+![Version](https://img.shields.io/static/v1?label=Version&message=2.9.0-beta0&color=brightgreen)
 
 ## Содержание
 
@@ -71,7 +71,12 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions lau
 
 ## Авторизация пользователей
 
-Если в вашем приложении присутствует авторизация пользователей, вы можете передать ID пользователя в Carrot quest:
+Если в вашем приложении присутствует авторизация пользователей, вы можете передать ID пользователя в Carrot quest. Существует два способа авторизации. 
+
+1. Напрямую передать userAuthKey
+2. Передать hash генерируемый у вас на бэке
+
+1. Вход через user auth key:
 
 ```Swift
 Carrot.shared.auth(
@@ -85,7 +90,21 @@ Carrot.shared.auth(
         })
 ```
 
-для реализации функции выхода:
+2. Вход через hash:
+
+```Swift
+Carrot.shared.hashedAuth(
+    withUserId: userId, 
+    withHash: hash,
+        successHandler: {
+                print("Carrotquest SDK user auth successed")
+        },
+        errorHandler: { error in
+            print("Carrotquest SDK user auth error: " + error)
+        })
+```
+
+Для реализации функции выхода:
 
 ```Swift
 Carrot.shared.logout(
@@ -266,7 +285,12 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
 
 ## Авторизация пользователей
 
-Если в вашем приложении присутствует авторизация пользователей, вы можете передать ID пользователя в Carrot quest:
+Если в вашем приложении присутствует авторизация пользователей, вы можете передать ID пользователя в Carrot quest. Существует два способа авторизации. 
+
+1. Напрямую передать userAuthKey
+2. Передать hash генерируемый у вас на бэке
+
+1. Вход через user auth key:
 
 ```objective-c
 Carrot *carrot = [Carrot shared];
@@ -282,7 +306,23 @@ Carrot *carrot = [Carrot shared];
 }];
 ```
 
-для реализации функции выхода:
+2. Вход через hash:
+
+```objective-c
+Carrot *carrot = [Carrot shared];
+[
+  carrot
+  authWithUserId: userId
+  withHash: hash
+  successHandler: ^(){
+      NSLog(@"Carrotquest SDK user auth successed");
+  }
+  errorHandler: ^(NSString *error){
+      NSLog(@"Carrotquest SDK user auth error: %@", error);
+}];
+```
+
+Для реализации функции выхода:
 
 ```objective-c
 Carrot *carrot = [Carrot shared];
