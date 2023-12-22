@@ -1,7 +1,7 @@
 
 ## Dashly for iOS
 
-![Version](https://img.shields.io/static/v1?label=Version&message=2.10.3&color=brightgreen)
+![Version](https://img.shields.io/static/v1?label=Version&message=2.10.4&color=brightgreen)
 ​
 
 ## Table of Contents
@@ -68,7 +68,12 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions lau
 
 ## User authorization
 
-In case your application has user authorization, you might want to send user id to Dashly:
+In case your application has user authorization, you might want to send user id to Dashly. There are two ways of authorization.
+
+1. Send userAuthKey directly
+2. Send hash generated at your backend
+
+1. Send userAuthKey directly
 
 ```Swift
 Dashly.shared.auth(
@@ -82,7 +87,21 @@ Dashly.shared.auth(
         })
 ```
 
-to realize the logout function:
+2. Send hash generated at your backend
+
+```Swift
+Dashly.shared.auth(
+    withUserId: userId, 
+    withHash: hash,
+        successHandler: {
+            print("Dashly SDK user auth successed")
+        },
+        errorHandler: { error in
+            print("Dashly SDK user auth error: " + error)
+        })
+```
+
+To realize the logout function:
 
 ```Swift
 Dashly.shared.logout(
@@ -248,7 +267,12 @@ You should add this code into your app's AppDelegate file in order to initialize
 
 ## User authorization
 
-In case your application has user authorization, you might want to send user id to Dashly:
+In case your application has user authorization, you might want to send user id to Dashly. There are two ways of authorization.
+
+1. Send userAuthKey directly
+2. Send hash generated at your backend
+
+1. Send userAuthKey directly
 
 ```objective-c
 Dashly *dashly = [Dashly shared];
@@ -264,7 +288,23 @@ Dashly *dashly = [Dashly shared];
 }];
 ```
 
-to realize the logout function:
+2. Send hash generated at your backend
+
+```objective-c
+Dashly *dashly = [Dashly shared];
+[
+  dashly
+  authWithUserId: userId
+  withHash: hash
+  successHandler: ^(){
+      NSLog(@"Dashly SDK user auth successed");
+  }
+  errorHandler: ^(NSString *error){
+      NSLog(@"Dashly SDK user auth error: %@", error);
+}];
+```
+
+To realize the logout function:
 
 ```objective-c
 Dashly *dashly = [Dashly shared];
