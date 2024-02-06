@@ -1,7 +1,7 @@
 
 ## Dashly for iOS
 
-![Version](https://img.shields.io/static/v1?label=Version&message=2.10.4&color=brightgreen)
+![Version](https://img.shields.io/static/v1?label=Version&message=2.10.5&color=brightgreen)
 ​
 
 ## Table of Contents
@@ -90,7 +90,7 @@ Dashly.shared.auth(
 2. Send hash generated at your backend
 
 ```Swift
-Dashly.shared.auth(
+Dashly.shared.hashedAuth(
     withUserId: userId, 
     withHash: hash,
         successHandler: {
