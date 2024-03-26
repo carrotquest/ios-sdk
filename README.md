@@ -1,6 +1,6 @@
 ## Carrot quest для iOS
 
-![Version](https://img.shields.io/static/v1?label=Version&message=2.9.0-beta0&color=brightgreen)
+![Version](https://img.shields.io/static/v1?label=Version&message=2.11.1&color=brightgreen)
 
 ## Содержание
 
@@ -722,3 +722,18 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
     }
 }
 ```
+
+<a name="TurrOffLogs"></a>
+
+## Отлючение дебажных логов
+
+Для отключения дебажных логов от встроенного в SDK moya, и от самого SDK, необходимо добавить специальный ключ в info.plist вашего проекта. 
+
+```XML (Plist)
+<key>moyaLog</key>
+<string>0</string>
+```
+
+0 - логи выключены
+
+1 - логи включены
