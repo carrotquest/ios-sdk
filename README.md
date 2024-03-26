@@ -23,6 +23,7 @@
 - [Локализация](#localization)
 - [Xcode 15](#xcode15)
 - [Использование ссылок в пушах](#Push+link) 
+- [Отлючение дебажных логов](#TurrOffLogs)
 
 <a name="setup_pods"></a>
 
