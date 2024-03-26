@@ -23,7 +23,7 @@
 - [Локализация](#localization)
 - [Xcode 15](#xcode15)
 - [Использование ссылок в пушах](#Push+link) 
-- [Отлючение дебажных логов](#TurrOffLogs)
+- [Отлючение дебажных логов](#TurnOffLogs)
 
 <a name="setup_pods"></a>
 
@@ -724,7 +724,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
 }
 ```
 
-<a name="TurrOffLogs"></a>
+<a name="TurnOffLogs"></a>
 
 ## Отлючение дебажных логов
 
