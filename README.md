@@ -21,6 +21,7 @@
   - [Notifications](#notif_objc)
 - [Double notifications](#notif_extension)
 - [Xcode 15](#xcode15)
+- [Turn off logs](#TurnOffLogs)
 
 <a name="setup_pods"></a>
 
@@ -571,3 +572,18 @@ end
 ```
 
 Perhaps in the future, CocoaPods will be updated and this code will have to be removed, but for now, it is necessary.
+
+<a name="TurnOffLogs"></a>
+
+## Turn off logs
+
+To turn off the debug logs from the SDK's built-in moya, and from the SDK itself, you need to add a special key to your project's info.plist. 
+
+```XML (Plist)
+<key>moyaLog</key>
+<string>0</string>
+```
+
+0 - logs off
+
+1 - logs on
