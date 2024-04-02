@@ -69,10 +69,7 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions lau
 
 ## User authorization
 
-In case your application has user authorization, you might want to send user id to Dashly. There are two ways of authorization.
-
-1. Send userAuthKey directly
-2. Send hash generated at your backend
+In case your application has user authorization, you might want to send user id to Dashly. There are two ways of authorization: send userAuthKey directly, send hash generated at your backend.
 
 1. Send userAuthKey directly
 
@@ -268,10 +265,7 @@ You should add this code into your app's AppDelegate file in order to initialize
 
 ## User authorization
 
-In case your application has user authorization, you might want to send user id to Dashly. There are two ways of authorization.
-
-1. Send userAuthKey directly
-2. Send hash generated at your backend
+In case your application has user authorization, you might want to send user id to Dashly. There are two ways of authorization: send userAuthKey directly, send hash generated at your backend.
 
 1. Send userAuthKey directly
 
