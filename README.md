@@ -1,6 +1,6 @@
 ## Carrot quest для iOS
 
-![Version](https://img.shields.io/static/v1?label=Version&message=2.11.1&color=brightgreen)
+![Version](https://img.shields.io/static/v1?label=Version&message=2.9.0-beta0&color=brightgreen)
 
 ## Содержание
 
@@ -23,7 +23,6 @@
 - [Локализация](#localization)
 - [Xcode 15](#xcode15)
 - [Использование ссылок в пушах](#Push+link) 
-- [Отлючение дебажных логов](#TurnOffLogs)
 
 <a name="setup_pods"></a>
 
@@ -72,7 +71,10 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions lau
 
 ## Авторизация пользователей
 
-Если в вашем приложении присутствует авторизация пользователей, вы можете передать ID пользователя в Carrot quest. Существует два способа авторизации: напрямую передать userAuthKey, передать hash генерируемый у вас на бэке.
+Если в вашем приложении присутствует авторизация пользователей, вы можете передать ID пользователя в Carrot quest. Существует два способа авторизации. 
+
+1. Напрямую передать userAuthKey
+2. Передать hash генерируемый у вас на бэке
 
 1. Вход через user auth key:
 
@@ -283,7 +285,10 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
 
 ## Авторизация пользователей
 
-Если в вашем приложении присутствует авторизация пользователей, вы можете передать ID пользователя в Carrot quest. Существует два способа авторизации: напрямую передать userAuthKey, передать hash генерируемый у вас на бэке.
+Если в вашем приложении присутствует авторизация пользователей, вы можете передать ID пользователя в Carrot quest. Существует два способа авторизации. 
+
+1. Напрямую передать userAuthKey
+2. Передать hash генерируемый у вас на бэке
 
 1. Вход через user auth key:
 
@@ -717,18 +722,3 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
     }
 }
 ```
-
-<a name="TurnOffLogs"></a>
-
-## Отлючение дебажных логов
-
-Для отключения дебажных логов от встроенного в SDK moya, и от самого SDK, необходимо добавить специальный ключ в info.plist вашего проекта. 
-
-```XML (Plist)
-<key>moyaLog</key>
-<string>0</string>
-```
-
-0 - логи выключены
-
-1 - логи включены
