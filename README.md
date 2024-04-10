@@ -1,7 +1,7 @@
 
 ## Dashly for iOS
 
-![Version](https://img.shields.io/static/v1?label=Version&message=2.11.1&color=brightgreen)
+![Version](https://img.shields.io/static/v1?label=Version&message=2.12.0&color=brightgreen)
 ​
 
 ## Table of Contents
@@ -21,7 +21,6 @@
   - [Notifications](#notif_objc)
 - [Double notifications](#notif_extension)
 - [Xcode 15](#xcode15)
-- [Turn off logs](#TurnOffLogs)
 
 <a name="setup_pods"></a>
 
@@ -69,7 +68,10 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions lau
 
 ## User authorization
 
-In case your application has user authorization, you might want to send user id to Dashly. There are two ways of authorization: send userAuthKey directly, send hash generated at your backend.
+In case your application has user authorization, you might want to send user id to Dashly. There are two ways of authorization.
+
+1. Send userAuthKey directly
+2. Send hash generated at your backend
 
 1. Send userAuthKey directly
 
@@ -265,7 +267,10 @@ You should add this code into your app's AppDelegate file in order to initialize
 
 ## User authorization
 
-In case your application has user authorization, you might want to send user id to Dashly. There are two ways of authorization: send userAuthKey directly, send hash generated at your backend.
+In case your application has user authorization, you might want to send user id to Dashly. There are two ways of authorization.
+
+1. Send userAuthKey directly
+2. Send hash generated at your backend
 
 1. Send userAuthKey directly
 
@@ -566,18 +571,3 @@ end
 ```
 
 Perhaps in the future, CocoaPods will be updated and this code will have to be removed, but for now, it is necessary.
-
-<a name="TurnOffLogs"></a>
-
-## Turn off logs
-
-To turn off the debug logs from the SDK's built-in moya, and from the SDK itself, you need to add a special key to your project's info.plist. 
-
-```XML (Plist)
-<key>moyaLog</key>
-<string>0</string>
-```
-
-0 - logs off
-
-1 - logs on
