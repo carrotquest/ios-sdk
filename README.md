@@ -464,6 +464,8 @@ Carrot *carrot = [Carrot shared];
 Для отображения уведомлений, необходимо добавить код в AppDelegate:
 
 ```objective-c
+#import <UserNotifications/UserNotifications.h>
+
 - (void)userNotificationCenter:(UNUserNotificationCenter *)center
        willPresentNotification:(UNNotification *)notification
          withCompletionHandler:(void (^)(UNNotificationPresentationOptions options))completionHandler {
@@ -479,17 +481,23 @@ Carrot *carrot = [Carrot shared];
 Для обработки кликов на уведомления:
 
 ```objective-c
+#import <UserNotifications/UserNotifications.h>
+
 - (void)userNotificationCenter:(UNUserNotificationCenter *)center
 didReceiveNotificationResponse:(UNNotificationResponse *)response
          withCompletionHandler:(void(^)(void))completionHandler {
     CarrotNotificationService *service = [CarrotNotificationService shared];
     if ([service canHandleWithResponse:response]) {
-        [service clickNotificationWithNotificationResponse:response appGroudDomain:nil];
+        [service clickNotificationWithNotificationResponse:response appGroudDomain:nil openLink:true];
     } else {
         // Логика для пользовательских уведомлений
     }
 }
 ```
+
+Подробнее о том, зачем нужен пункт appGroudDomain можно почитать [тут](#notif_extension). 
+
+Подробнее о том, зачем нужен пункт openLink можно почитать [тут](#Push+link).
 
 <a name="notif_extension"></a>
 
