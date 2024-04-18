@@ -21,6 +21,7 @@
   - [Notifications](#notif_objc)
 - [Double notifications](#notif_extension)
 - [Xcode 15](#xcode15)
+- [Turn off logs](#TurnOffLogs)
 
 <a name="setup_pods"></a>
 
@@ -68,10 +69,7 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions lau
 
 ## User authorization
 
-In case your application has user authorization, you might want to send user id to Dashly. There are two ways of authorization.
-
-1. Send userAuthKey directly
-2. Send hash generated at your backend
+In case your application has user authorization, you might want to send user id to Dashly. There are two ways of authorization: send userAuthKey directly, send hash generated at your backend.
 
 1. Send userAuthKey directly
 
@@ -267,10 +265,7 @@ You should add this code into your app's AppDelegate file in order to initialize
 
 ## User authorization
 
-In case your application has user authorization, you might want to send user id to Dashly. There are two ways of authorization.
-
-1. Send userAuthKey directly
-2. Send hash generated at your backend
+In case your application has user authorization, you might want to send user id to Dashly. There are two ways of authorization: send userAuthKey directly, send hash generated at your backend.
 
 1. Send userAuthKey directly
 
@@ -442,6 +437,8 @@ fcmToken for Dashly SDK should be set in MessagingDelegate next:
 Add this code into UNUserNotificationCenterDelegate to display notifications:
 
 ```objective-c
+#import <UserNotifications/UserNotifications.h>
+
 - (void)userNotificationCenter:(UNUserNotificationCenter *)center
        willPresentNotification:(UNNotification *)notification
          withCompletionHandler:(void (^)(UNNotificationPresentationOptions options))completionHandler {
@@ -457,12 +454,14 @@ Add this code into UNUserNotificationCenterDelegate to display notifications:
 Use this for handling clicks on notifications:
 
 ```objective-c
+#import <UserNotifications/UserNotifications.h>
+
 - (void)userNotificationCenter:(UNUserNotificationCenter *)center
 didReceiveNotificationResponse:(UNNotificationResponse *)response
          withCompletionHandler:(void(^)(void))completionHandler {
     DashlyNotificationService *service = [DashlyNotificationService shared];
     if ([service canHandleWithResponse:response]) {
-        [service clickNotificationWithNotificationResponse:response appGroudDomain:nil];
+        [service clickNotificationWithNotificationResponse:response appGroudDomain:nil openLink:true];
     } else {
         // user notifications logic
     }
@@ -470,6 +469,10 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 ```
 
 <a name="notif_extension"></a>
+
+You can read more about why you need the appGroudDomain clause [here](#notif_extension). 
+
+You can read more about why you need the openLink clause [here](#Push+link).
 
 ## Double notifications
 
@@ -571,3 +574,18 @@ end
 ```
 
 Perhaps in the future, CocoaPods will be updated and this code will have to be removed, but for now, it is necessary.
+
+<a name="TurnOffLogs"></a>
+
+## Turn off logs
+
+To turn off the debug logs from the SDK's built-in moya, and from the SDK itself, you need to add a special key to your project's info.plist. 
+
+```XML (Plist)
+<key>moyaLog</key>
+<string>0</string>
+```
+
+0 - logs off
+
+1 - logs on
