@@ -1,6 +1,6 @@
 ## Carrot quest для iOS
 
-![Version](https://img.shields.io/static/v1?label=Version&message=2.9.0-beta0&color=brightgreen)
+![Version](https://img.shields.io/static/v1?label=Version&message=2.12.0&color=brightgreen)
 
 ## Содержание
 
@@ -23,6 +23,7 @@
 - [Локализация](#localization)
 - [Xcode 15](#xcode15)
 - [Использование ссылок в пушах](#Push+link) 
+- [Отлючение дебажных логов](#TurnOffLogs)
 
 <a name="setup_pods"></a>
 
@@ -71,10 +72,7 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions lau
 
 ## Авторизация пользователей
 
-Если в вашем приложении присутствует авторизация пользователей, вы можете передать ID пользователя в Carrot quest. Существует два способа авторизации. 
-
-1. Напрямую передать userAuthKey
-2. Передать hash генерируемый у вас на бэке
+Если в вашем приложении присутствует авторизация пользователей, вы можете передать ID пользователя в Carrot quest. Существует два способа авторизации: напрямую передать userAuthKey, передать hash генерируемый у вас на бэке.
 
 1. Вход через user auth key:
 
@@ -285,10 +283,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
 
 ## Авторизация пользователей
 
-Если в вашем приложении присутствует авторизация пользователей, вы можете передать ID пользователя в Carrot quest. Существует два способа авторизации. 
-
-1. Напрямую передать userAuthKey
-2. Передать hash генерируемый у вас на бэке
+Если в вашем приложении присутствует авторизация пользователей, вы можете передать ID пользователя в Carrot quest. Существует два способа авторизации: напрямую передать userAuthKey, передать hash генерируемый у вас на бэке.
 
 1. Вход через user auth key:
 
@@ -464,6 +459,8 @@ Carrot *carrot = [Carrot shared];
 Для отображения уведомлений, необходимо добавить код в AppDelegate:
 
 ```objective-c
+#import <UserNotifications/UserNotifications.h>
+
 - (void)userNotificationCenter:(UNUserNotificationCenter *)center
        willPresentNotification:(UNNotification *)notification
          withCompletionHandler:(void (^)(UNNotificationPresentationOptions options))completionHandler {
@@ -479,17 +476,23 @@ Carrot *carrot = [Carrot shared];
 Для обработки кликов на уведомления:
 
 ```objective-c
+#import <UserNotifications/UserNotifications.h>
+
 - (void)userNotificationCenter:(UNUserNotificationCenter *)center
 didReceiveNotificationResponse:(UNNotificationResponse *)response
          withCompletionHandler:(void(^)(void))completionHandler {
     CarrotNotificationService *service = [CarrotNotificationService shared];
     if ([service canHandleWithResponse:response]) {
-        [service clickNotificationWithNotificationResponse:response appGroudDomain:nil];
+        [service clickNotificationWithNotificationResponse:response appGroudDomain:nil openLink:true];
     } else {
         // Логика для пользовательских уведомлений
     }
 }
 ```
+
+Подробнее о том, зачем нужен пункт appGroudDomain можно почитать [тут](#notif_extension). 
+
+Подробнее о том, зачем нужен пункт openLink можно почитать [тут](#Push+link).
 
 <a name="notif_extension"></a>
 
@@ -722,3 +725,18 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
     }
 }
 ```
+
+<a name="TurnOffLogs"></a>
+
+## Отлючение дебажных логов
+
+Для отключения дебажных логов от встроенного в SDK moya, и от самого SDK, необходимо добавить специальный ключ в info.plist вашего проекта. 
+
+```XML (Plist)
+<key>moyaLog</key>
+<string>0</string>
+```
+
+0 - логи выключены
+
+1 - логи включены
