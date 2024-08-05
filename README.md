@@ -80,8 +80,8 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions lau
 Carrot.shared.auth(
     withUserId: userId, 
     withUserAuthKey: userAuthKey,
-        successHandler: {
-                print("Carrotquest SDK user auth successed")
+        successHandler: { carrotId in
+                print("Carrotquest SDK user auth successed, CarrotId = \(carrotId)")
         },
         errorHandler: { error in
             print("Carrotquest SDK user auth error: " + error)
@@ -94,8 +94,8 @@ Carrot.shared.auth(
 Carrot.shared.hashedAuth(
     withUserId: userId, 
     withHash: hash,
-        successHandler: {
-                print("Carrotquest SDK user auth successed")
+        successHandler: { carrotId in
+                print("Carrotquest SDK user auth successed, CarrotId = \(carrotId)")
         },
         errorHandler: { error in
             print("Carrotquest SDK user auth error: " + error)
@@ -293,8 +293,8 @@ Carrot *carrot = [Carrot shared];
   carrot
   authWithUserId: userId
   withUserAuthKey: userAuthKey
-  successHandler: ^(){
-      NSLog(@"Carrotquest SDK user auth successed");
+  successHandler: ^(NSString *carrotId){
+      NSLog(@"Carrotquest SDK user auth successed, CarrotId: %@", carrotId);
   }
   errorHandler: ^(NSString *error){
       NSLog(@"Carrotquest SDK user auth error: %@", error);
@@ -309,8 +309,8 @@ Carrot *carrot = [Carrot shared];
   carrot
   authWithUserId: userId
   withHash: hash
-  successHandler: ^(){
-      NSLog(@"Carrotquest SDK user auth successed");
+  successHandler: ^(NSString *carrotId){
+      NSLog(@"Carrotquest SDK user auth successed, CarrotId: %@", carrotId);
   }
   errorHandler: ^(NSString *error){
       NSLog(@"Carrotquest SDK user auth error: %@", error);
