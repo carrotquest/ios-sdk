@@ -77,8 +77,8 @@ In case your application has user authorization, you might want to send user id 
 Dashly.shared.auth(
     withUserId: userId, 
     withUserAuthKey: userAuthKey,
-        successHandler: {
-            print("Dashly SDK user auth successed")
+        successHandler: { dashlyId in
+            print("Dashly SDK user auth successed, DashlyID = \(dashlyId)")
         },
         errorHandler: { error in
             print("Dashly SDK user auth error: " + error)
@@ -91,8 +91,8 @@ Dashly.shared.auth(
 Dashly.shared.hashedAuth(
     withUserId: userId, 
     withHash: hash,
-        successHandler: {
-            print("Dashly SDK user auth successed")
+        successHandler: { dashlyId in
+            print("Dashly SDK user auth successed, DashlyID = \(dashlyId)")
         },
         errorHandler: { error in
             print("Dashly SDK user auth error: " + error)
@@ -275,8 +275,8 @@ Dashly *dashly = [Dashly shared];
   dashly
   authWithUserId: userId
   withUserAuthKey: userAuthKey
-  successHandler: ^(){
-      NSLog(@"Dashly SDK user auth successed");
+  successHandler: ^(NSString *dashlyId){
+      NSLog(@"Dashly SDK user auth successed, DashlyId: %@", dashlyId);
   }
   errorHandler: ^(NSString *error){
       NSLog(@"Dashly SDK user auth error: %@", error);
@@ -291,8 +291,8 @@ Dashly *dashly = [Dashly shared];
   dashly
   authWithUserId: userId
   withHash: hash
-  successHandler: ^(){
-      NSLog(@"Dashly SDK user auth successed");
+  successHandler: ^(NSString *dashlyId){
+      NSLog(@"Dashly SDK user auth successed, DashlyId: %@", dashlyId);
   }
   errorHandler: ^(NSString *error){
       NSLog(@"Dashly SDK user auth error: %@", error);
