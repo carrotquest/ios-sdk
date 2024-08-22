@@ -1,6 +1,6 @@
 ## Carrot quest для iOS
 
-![Version](https://img.shields.io/static/v1?label=Version&message=2.12.6&color=brightgreen)
+![Version](https://img.shields.io/static/v1?label=Version&message=2.12.9&color=brightgreen)
 
 ## Содержание
 
@@ -10,6 +10,7 @@
   - [Авторизация пользователей](#auth_swift)
   - [Свойства пользователей](#prop_swift)
   - [События](#event_swift)
+  - [Трекинг навигации](#tracking_swift)
   - [Чат с оператором](#chat_swift)
   - [Уведомления](#notif_swift)
 - [Objective-C](#init_objc)
@@ -17,6 +18,7 @@
   - [Авторизация пользователей](#auth_objc)
   - [Свойства пользователей](#prop_objc)
   - [События](#event_objc)
+  - [Трекинг навигации](#tracking_objc)
   - [Чат с оператором](#chat_objc)
   - [Уведомления](#notif_objc)
 - [Дублирование уведомлений и статистика доставленных пушей](#notif_extension)
@@ -147,6 +149,17 @@ UserProperty(key: key, value: value, operation: .updateOrCreate)
 Carrot.shared.trackEvent(withName: name, withParams: params)
 ```
 где `params` &mdash; дополнительные параметры для события в виде JSON-строки.
+
+<a name="tracking_swift"></a>
+
+## Трекинг навигации
+
+B SDK есть возможность трекинга навигации внутри приложения для того, чтобы при необходимости запускать различные триггерные сообщения на определенных экранах. Для этого используйте метод:
+
+```Swift
+let name: String = "screenName"
+Carrot.shared.trackScreen(name)
+```
 
 <a name="chat_swift"></a>
 
@@ -379,6 +392,17 @@ Carrot *carrot = [Carrot shared];
 ```
 
 где `params` &mdash; дополнительные параметры для события в виде JSON-строки.
+
+<a name="tracking_objc"></a>
+
+## Трекинг навигации
+
+B SDK есть возможность трекинга навигации внутри приложения для того, чтобы при необходимости запускать различные триггерные сообщения на определенных экранах. Для этого используйте метод:
+
+```objective-c
+Carrot *carrot = [Carrot shared];
+[carrot trackScreen:@"screenName"];
+```
 
 <a name="chat_objc"></a>
 
