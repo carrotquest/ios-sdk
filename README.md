@@ -1,7 +1,7 @@
 
 ## Dashly for iOS
 
-![Version](https://img.shields.io/static/v1?label=Version&message=2.12.7&color=brightgreen)
+![Version](https://img.shields.io/static/v1?label=Version&message=2.12.8&color=brightgreen)
 ​
 
 ## Table of Contents
@@ -12,12 +12,14 @@
   - [User authorization](#auth_swift)
   - [User properties and events](#prop_swift)
   - [Live chat](#chat_swift)
+  - [Opening links manually](#custom_url_opener_swift)
   - [Notifications](#notif_swift)
 - [Objective-C](#init_objc)
   - [Initialization](#init_objc)
   - [User authorization](#auth_objc)
   - [User properties and events](#prop_objc)
   - [Live chat](#chat_objc)
+  - [Opening links manually](#custom_url_opener_objc)
   - [Notifications](#notif_objc)
 - [Double notifications](#notif_extension)
 - [Xcode 15](#xcode15)
@@ -166,6 +168,43 @@ After initialization you can open chat from any place using thix method:
 ```swift
 Dashly.shared.openChat()
 ```
+
+<a name="custom_url_opener_swift"></a>
+
+## Opening links manually
+
+In order for universal links to work correctly when clicking on a link inside the SDK, there is a special method for manually controlling the method of opening links. It can be called anywhere, but preferably somewhere in your AppDeletage/SceneDelegate near the SDK initialization:
+
+```swift
+import CarrotSDK
+
+CustomUrlOpener.shared.set(for: .chat, customLogic: { url in
+      // Any custom logic for opening links
+})
+```
+
+As you can see, the first argument that has label `for` the 4 available options:
+
+- push - changes the logic when clicking on a link in push
+- chat - changes the logic when clicking on a link in chat
+- popup - changes logic when clicking on a link in popup
+- all - changes the logic when clicking on a link in all 3 places
+
+So if you want to handle diplink (universal link) clicks in all places in the SDK, you can write some code like this:
+
+```swift
+import CarrotSDK
+
+CustomUrlOpener.shared.set(for: .all) { url in
+    if url.host?.contains("YOUR DOMAIN") ?? false {
+        CustomUrlOpener.shared.openUniversalLink(url)
+    } else {
+        CustomUrlOpener.shared.openBrowserLink(url)
+    }
+}
+```
+
+If anything, there is no error here. Current versions of swift do not allow you to specify the label of the last closure in a function call. 
 
 <a name="notif_swift"></a>
 
@@ -414,6 +453,49 @@ Dashly *dashly = [Dashly shared];
   getUnreadMessagesCount:^(NSInteger count){
 		NSLog(@"Dashly SDK dialogs count: %ld", (long)count);
 }];
+```
+
+<a name="custom_url_opener_objc"></a>
+
+## Opening links manually
+
+In order for universal links to work correctly when clicking on a link inside the SDK, there is a special method for manually controlling the method of opening links. It can be called anywhere, but preferably somewhere in your AppDeletage/SceneDelegate near the SDK initialization:
+
+```objective-c
+CustomUrlOpener *opener = [CustomUrlOpener shared];
+
+[
+  opener
+  for: 1
+  customLogic: ^(NSURL *url){
+       // Any custom logic for opening links
+   }
+];
+```
+
+As you can see, the first argument that has label `for` the 4 available options:
+
+- push - changes the logic when clicking on a link in push
+- chat - changes the logic when clicking on a link in chat
+- popup - changes logic when clicking on a link in popup
+- all - changes the logic when clicking on a link in all 3 places
+
+So if you want to handle diplink (universal link) clicks in all places in the SDK, you can write some code like this:
+
+```objective-c
+CustomUrlOpener *opener = [CustomUrlOpener shared];
+
+[
+  opener
+  for: 3
+  customLogic: ^(NSURL *url){
+       if ([[url host] containsString:@"YOUR DOMAIN"]) {
+            [[CustomUrlOpener shared] openUniversalLink:url];
+        } else {
+            [[CustomUrlOpener shared] openBrowserLink:url];
+        }
+   }
+];
 ```
 
 <a name="notif_objc"></a>
