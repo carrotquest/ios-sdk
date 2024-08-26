@@ -1,6 +1,6 @@
 ## Carrot quest для iOS
 
-![Version](https://img.shields.io/static/v1?label=Version&message=2.12.7&color=brightgreen)
+![Version](https://img.shields.io/static/v1?label=Version&message=2.12.8&color=brightgreen)
 
 ## Содержание
 
@@ -11,6 +11,7 @@
   - [Свойства пользователей](#prop_swift)
   - [События](#event_swift)
   - [Чат с оператором](#chat_swift)
+  - [Открытие ссылок вручную](#custom_url_opener_swift)
   - [Уведомления](#notif_swift)
 - [Objective-C](#init_objc)
   - [Инициализация](#init_objc)
@@ -18,6 +19,7 @@
   - [Свойства пользователей](#prop_objc)
   - [События](#event_objc)
   - [Чат с оператором](#chat_objc)
+  - [Открытие ссылок вручную](#custom_url_opener_objc)
   - [Уведомления](#notif_objc)
 - [Дублирование уведомлений и статистика доставленных пушей](#notif_extension)
 - [Локализация](#localization)
@@ -186,6 +188,43 @@ Carrot.shared.getUnreadMessagesCount({ count in
     print("Carrotquest SDK messages count: \(count)")
 })
 ```
+
+<a name="custom_url_opener_swift"></a>
+
+## Открытие ссылок вручную
+
+Для того, чтобы при клике на ссылку внутри SDK правильно работали диплинки (universal link) существует специальный метод ручного управления методом открытия ссылок. Его можно вызвать где угодно, но лучше всего где-то в вашем AppDeletage/SceneDelegate рядом с инициализацией SDK:
+
+```swift
+import CarrotSDK
+
+CustomUrlOpener.shared.set(for: .chat, customLogic: { url in
+      // Любая кастомная логика по открытию ссылок
+})
+```
+
+Как вы можете заметить, первый аргумент, который имеет label `for` на 4 доступных варианта:
+
+- push - изменяет логику при клике на ссылку в пуше
+- chat - изменяет логику при клике на ссылку в чате
+- popup - изменяет логику при клике на ссылку в попапе
+- all - изменяет логику при клике на ссылку во всех 3 местах
+
+Таким образом, если вы хотите обработать клики на диплинк (universal link) во всех местах SDK, можно написать какой-то такой код:
+
+```swift
+import CarrotSDK
+
+CustomUrlOpener.shared.set(for: .all) { url in
+    if url.host?.contains("ВАШ ДОМЕН") ?? false {
+        CustomUrlOpener.shared.openUniversalLink(url)
+    } else {
+        CustomUrlOpener.shared.openBrowserLink(url)
+    }
+}
+```
+
+Если что, ошибки тут нет. Актуальные версии swift позволяют не указывать label последего замыкания в вызове функции. 
 
 <a name="notif_swift"></a>
 
@@ -436,6 +475,49 @@ Carrot *carrot = [Carrot shared];
   getUnreadMessagesCount:^(NSInteger count){
 		NSLog(@"Carrotquest SDK dialogs count: %ld", (long)count);
 }];
+```
+
+<a name="custom_url_opener_objc"></a>
+
+## Открытие ссылок вручную
+
+Для того, чтобы при клике на ссылку внутри SDK правильно работали диплинки (universal link) существует специальный метод ручного управления методом открытия ссылок. Его можно вызвать где угодно, но лучше всего где-то в вашем AppDeletage/SceneDelegate рядом с инициализацией SDK:
+
+```objective-c
+CustomUrlOpener *opener = [CustomUrlOpener shared];
+
+[
+  opener
+  for: 1
+  customLogic: ^(NSURL *url){
+       // Любая кастомная логика по открытию ссылок
+   }
+];
+```
+
+Как вы можете заметить, первый аргумент, который имеет label `for` на 4 доступных варианта:
+
+- push - изменяет логику при клике на ссылку в пуше
+- chat - изменяет логику при клике на ссылку в чате
+- popup - изменяет логику при клике на ссылку в попапе
+- all - изменяет логику при клике на ссылку во всех 3 местах
+
+Таким образом, если вы хотите обработать клики на диплинк (universal link) во всех местах SDK, можно написать какой-то такой код:
+
+```objective-c
+CustomUrlOpener *opener = [CustomUrlOpener shared];
+
+[
+  opener
+  for: 3
+  customLogic: ^(NSURL *url){
+       if ([[url host] containsString:@"ВАШ ДОМЕН"]) {
+            [[CustomUrlOpener shared] openUniversalLink:url];
+        } else {
+            [[CustomUrlOpener shared] openBrowserLink:url];
+        }
+   }
+];
 ```
 
 <a name="notif_objc"></a>
