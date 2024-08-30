@@ -1,7 +1,7 @@
 
 ## Dashly for iOS
 
-![Version](https://img.shields.io/static/v1?label=Version&message=2.12.8&color=brightgreen)
+![Version](https://img.shields.io/static/v1?label=Version&message=2.12.9&color=brightgreen)
 ​
 
 ## Table of Contents
@@ -11,6 +11,7 @@
   - [Initialization](#init_swift)
   - [User authorization](#auth_swift)
   - [User properties and events](#prop_swift)
+  - [Navigation tracking](#tracking_swift)
   - [Live chat](#chat_swift)
   - [Opening links manually](#custom_url_opener_swift)
   - [Notifications](#notif_swift)
@@ -18,6 +19,7 @@
   - [Initialization](#init_objc)
   - [User authorization](#auth_objc)
   - [User properties and events](#prop_objc)
+  - [Navigation tracking](#tracking_objc)
   - [Live chat](#chat_objc)
   - [Opening links manually](#custom_url_opener_objc)
   - [Notifications](#notif_objc)
@@ -146,6 +148,17 @@ Dashly.shared.trackEvent(withName: name, withParams: params)
 ```
 where `params` is a JSON string with additional set of event parameters
 ​
+
+<a name="tracking_swift"></a>
+
+## Navigation tracking
+
+B SDK has the ability to track navigation within the application in order to trigger different trigger messages on specific screens when needed. To do this, use the method:
+
+```Swift
+let name: String = "screenName"
+Carrot.shared.trackScreen(name)
+```
 
 <a name="chat_swift"></a>
 
@@ -396,8 +409,18 @@ Dashly *dashly = [Dashly shared];
 ];
 ```
 
-where `params` is a JSON string with additional set of event parameters
-​
+where `params` is a JSON string with additional set of event parameters​
+
+<a name="tracking_objc"></a>
+
+## Трекинг навигации
+
+B SDK has the ability to track navigation within the application in order to trigger different trigger messages on specific screens when needed. To do this, use the method:
+
+```objective-c
+Carrot *carrot = [Carrot shared];
+[carrot trackScreen:@"screenName"];
+```
 
 <a name="chat_objc"></a>
 
