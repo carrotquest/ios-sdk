@@ -1,6 +1,6 @@
 ## Carrot quest для iOS
 
-![Version](https://img.shields.io/static/v1?label=Version&message=2.12.9&color=brightgreen)
+![Version](https://img.shields.io/static/v1?label=Version&message=2.12.11&color=brightgreen)
 
 ## Содержание
 
@@ -23,6 +23,7 @@
   - [Чат с оператором](#chat_objc)
   - [Открытие ссылок вручную](#custom_url_opener_objc)
   - [Уведомления](#notif_objc)
+- [Важная информация о Push уведомлениях](#important_push)
 - [Дублирование уведомлений и статистика доставленных пушей](#notif_extension)
 - [Локализация](#localization)
 - [Xcode 15](#xcode15)
@@ -300,8 +301,6 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
     }
 }
 ```
-
-<a name="init_objc"></a>
 
 # Objective-C
 
@@ -599,6 +598,19 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 Подробнее о том, зачем нужен пункт appGroudDomain можно почитать [тут](#notif_extension). 
 
 Подробнее о том, зачем нужен пункт openLink можно почитать [тут](#Push+link).
+
+<a name="important_push"></a>
+
+## Важная информация о Push уведомлениях
+
+Необходимо добавить в info.plist вашего проекта параметр:
+
+```xml
+<key>FirebaseAppDelegateProxyEnabled</key>
+<string>0</string>
+```
+
+И обязательно, убедиться, что поле имеет значение string. Если кратко, то это переключает управление уведолмениями в ручной режим и позволяет SDK правильно функционировать. Подробнее можете почитать [тут](https://firebase.google.com/docs/cloud-messaging/ios/client?hl=ru).
 
 <a name="notif_extension"></a>
 
