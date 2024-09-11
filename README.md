@@ -1,7 +1,7 @@
 
 ## Dashly for iOS
 
-![Version](https://img.shields.io/static/v1?label=Version&message=2.12.9&color=brightgreen)
+![Version](https://img.shields.io/static/v1?label=Version&message=2.12.11&color=brightgreen)
 ​
 
 ## Table of Contents
@@ -23,6 +23,7 @@
   - [Live chat](#chat_objc)
   - [Opening links manually](#custom_url_opener_objc)
   - [Notifications](#notif_objc)
+- [Important information about Push notifications](#important_push)
 - [Double notifications](#notif_extension)
 - [Xcode 15](#xcode15)
 - [Turn off logs](#TurnOffLogs)
@@ -572,6 +573,19 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     }
 }
 ```
+
+<a name="important_push"></a>
+
+## Important information about Push notifications
+
+You need to add a parameter to info.plist of your project:
+
+```xml
+<key>FirebaseAppDelegateProxyEnabled</key>
+<string>0</string>
+```
+
+And make sure that the field has a string value. Briefly, this switches the notification management to manual mode and allows the SDK to function properly. You can read more [here](https://firebase.google.com/docs/cloud-messaging/ios/client?hl=ru).
 
 <a name="notif_extension"></a>
 
