@@ -2,20 +2,21 @@
 import PackageDescription
 
 let package = Package(
-    name: "CarrotSDKbeta",
+    name: "CarrotSDK",
     platforms: [
         .iOS(.v12)
     ],
     products: [
         .library(
-            name: "CarrotSDKbeta",
+            name: "CarrotSDK",
             targets: ["CarrotSDK"]
         ),
     ],
     targets: [
         .binaryTarget(
-            name: "CarrotSDKbeta",
-            url: "https://github.com/carrotquest/ios-sdk/blob/beta/CarrotSDK.xcframework.zip",
+            name: "CarrotSDK",
+            url: "https://github.com/carrotquest/ios-sdk/raw/refs/heads/beta/CarrotSDK.xcframework.zip",
             checksum: "730038bd74a6bed2fb1d0fe1b6830ba0a35759dc3e7722a4d3cd5cf2677bfccc"
+        ),
     ]
 )
