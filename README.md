@@ -1,8 +1,8 @@
 
 ## Dashly for iOS
 
-![Version](https://img.shields.io/static/v1?label=Version&message=2.12.11&color=brightgreen)
-​
+![Version](https://img.shields.io/static/v1?label=Version&message=2.12.11&color=brightgreen)[![SwiftPM compatible](https://img.shields.io/badge/SwiftPM-compatible-brightgreen.svg)](https://swift.org/package-manager/)
+
 
 ## Table of Contents
 
@@ -32,15 +32,26 @@
 
 ## Installation
 
-At the moment Dashly for iOS can be installed via CocoaPod.
-​
+At the moment Dashly for iOS can be installed via CocoaPod and Swift Package Manager.
+
 ## CocoaPods
 Add the following string into the pod file:
 ```swift
 pod 'DashlySDK'
 ```
 
+## Swift Package Manager
+
+In Xcode, click File->Add Package Dependencies...
+
+Then in the window that appears, in the “Search or Enter Package URL” field, paste a link to the SwiftPM repository:
+
+```url
+https://github.com/carrotquest/dashly-ios-spm.git
+```
+
 ## Initialization
+
 You'll need API Key and User Auth Key to work with Dashly for iOS. Those can be found on Settings - Developers tab:
 ![Developers](https://github.com/carrotquest/ios-sdk/blob/dashly/assets/ApiKeys.png?raw=true)<a name="swift"></a>
 
