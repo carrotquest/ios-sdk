@@ -1,10 +1,10 @@
 ## Carrot quest для iOS
 
-![Version](https://img.shields.io/static/v1?label=Version&message=2.12.11&color=brightgreen)[![SwiftPM compatible](https://img.shields.io/badge/SwiftPM-compatible-brightgreen.svg)](https://swift.org/package-manager/)
+![Version](https://img.shields.io/static/v1?label=Version&message=2.12.11&color=brightgreen)
 
 ## Содержание
 
-- [Установка](#setup_pods)
+- [Уставнока](#setup_pods)
 - [Swift](#swift)
   - [Инициализация](#init_swift)
   - [Авторизация пользователей](#auth_swift)
@@ -34,7 +34,7 @@
 
 ## Установка
 
-На данный момент Carrot quest для iOS можно установить с помощью CocoaPod и Swift Package Manager.
+На данный момент Carrot quest для iOS можно установить с помощью CocoaPod.
 
 ## CocoaPods
 Добавьте следующую строчку в pod файл:
@@ -42,18 +42,7 @@
 pod 'CarrotquestSDK'
 ```
 
-## Swift Package Manager
-
-В Xcode нажмите File->Add Package Dependencies...
-
-Затем в появившемся окне в поле "Search or Enter Package URL" вставте ссылку на SwiftPM репозиторий:
-
-```url
-https://github.com/carrotquest/carrotquest-ios-spm.git
-```
-
 ## Инициализация
-
 Для работы с Carrot quest для iOS вам понадобится API Key и User Auth Key. Вы можете найти эти ключи на вкладке "Настройки > Разработчикам":
 ![Разработчикам](https://raw.githubusercontent.com/carrotquest/ios-sdk/master/assets/ApiKeys.png)
 
