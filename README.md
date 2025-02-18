@@ -25,6 +25,7 @@
   - [Notifications](#notif_objc)
 - [Important information about Push notifications](#important_push)
 - [Double notifications](#notif_extension)
+- [Notifications unsubscribe method](#notifications_unsubscribe)
 - [Xcode 15](#xcode15)
 - [Turn off logs](#TurnOffLogs)
 
@@ -678,6 +679,28 @@ Lastly, send Identifier previously registered on Apple Developer Portal into sho
 ```swift
 let domain = "Identifier previously registered on Apple Developer Portal"
 notificationService.show(notification, appGroudDomain: domain, completionHandler: completionHandler)
+```
+
+<a name="notifications_unsubscribe"></a>
+
+## Notifications unsubscribe method
+
+There are methods to unsubscribe a particular user from fluff and from all mailings in principle.
+
+A method for unsubscribing from push:
+
+```swift
+import CarrotSDK
+
+CarrotNotificationService.shared.pushNotificationsUnsubscribe()
+```
+
+A method for unsubscribing from all push campaigns:
+
+```swift
+import CarrotSDK
+
+CarrotNotificationService.shared.pushCampaignsUnsubscribe()
 ```
 
 <a name="xcode15"></a>
