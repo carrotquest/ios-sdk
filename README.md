@@ -25,6 +25,7 @@
   - [Уведомления](#notif_objc)
 - [Важная информация о Push уведомлениях](#important_push)
 - [Дублирование уведомлений и статистика доставленных пушей](#notif_extension)
+- [Метод отписки от пушей](#notifications_unsubscribe)
 - [Локализация](#localization)
 - [Xcode 15](#xcode15)
 - [Использование ссылок в пушах](#Push+link) 
@@ -688,6 +689,28 @@ class NotificationService: CarrotNotificationServiceExtension {
 ```swift
 let domain = "Identifier зарегистрированный в Apple Developer Portal ранее"
 notificationService.show(notification, appGroudDomain: domain, completionHandler: completionHandler)
+```
+
+<a name="notifications_unsubscribe"></a>
+
+## Метод отписки от пушей
+
+Существуют методы отписать конкретного пользователя от пушей и от всех рассылок в принципе. 
+
+Метод для отписки от пушей:
+
+```swift
+import CarrotSDK
+
+CarrotNotificationService.shared.pushNotificationsUnsubscribe()
+```
+
+Метод для отписки от всех рассылок:
+
+```swift
+import CarrotSDK
+
+CarrotNotificationService.shared.pushCampaignsUnsubscribe()
 ```
 
 <a name="localization"></a>
