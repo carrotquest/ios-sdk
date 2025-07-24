@@ -1,7 +1,7 @@
 
 ## Dashly for iOS
 
-![Version](https://img.shields.io/static/v1?label=Version&message=2.13.2&color=brightgreen)[![SwiftPM compatible](https://img.shields.io/badge/SwiftPM-compatible-brightgreen.svg)](https://swift.org/package-manager/)
+![Version](https://img.shields.io/static/v1?label=Version&message=2.13.3&color=brightgreen)[![SwiftPM compatible](https://img.shields.io/badge/SwiftPM-compatible-brightgreen.svg)](https://swift.org/package-manager/)
 
 
 ## Table of Contents
@@ -170,7 +170,7 @@ B SDK has the ability to track navigation within the application in order to tri
 
 ```Swift
 let name: String = "screenName"
-Carrot.shared.trackScreen(name)
+Dashly.shared.trackScreen(name)
 ```
 
 <a name="chat_swift"></a>
@@ -194,6 +194,36 @@ After initialization you can open chat from any place using thix method:
 ```swift
 Dashly.shared.openChat()
 ```
+
+### Getting the number of unread dialogs and messages
+
+To keep track of the number of unread dialogs:
+
+```swift
+Dashly.shared.getUnreadConversationsCount { count in
+    print("Dashly SDK dialogs count: \(count)")
+}
+```
+
+and for the number of unread messages:
+
+```swift
+Dashly.shared.getUnreadMessagesCount { count in
+    print("Dashly SDK messages count: \(count)")
+}
+```
+
+### Tracking SDK UI Visibility
+
+You can track whether any SDK UI element (chat, dialog list, popup, etc.) is currently visible on the screen. The callback is triggered every time the UI appears or disappears:
+
+```swift
+Dashly.shared.onVisibilityUIChanged { isVisible in
+    print("Dashly SDK — isVisible: \(isVisible)")
+}
+```
+
+If isVisible == true, it means that some part of the SDK UI is currently being shown. If false, no SDK UI is visible on the screen.
 
 <a name="custom_url_opener_swift"></a>
 
@@ -426,13 +456,13 @@ where `params` is a JSON string with additional set of event parameters​
 
 <a name="tracking_objc"></a>
 
-## Трекинг навигации
+## Navigation tracking
 
 B SDK has the ability to track navigation within the application in order to trigger different trigger messages on specific screens when needed. To do this, use the method:
 
 ```objective-c
-Carrot *carrot = [Carrot shared];
-[carrot trackScreen:@"screenName"];
+Dashly *dashly = [Dashly shared];
+[dashly trackScreen:@"screenName"];
 ```
 
 <a name="chat_objc"></a>
@@ -490,6 +520,21 @@ Dashly *dashly = [Dashly shared];
 		NSLog(@"Dashly SDK dialogs count: %ld", (long)count);
 }];
 ```
+
+### Tracking SDK UI Visibility
+
+You can track whether any SDK UI element (chat, dialog list, popup, etc.) is currently visible on the screen. The callback is triggered every time the UI appears or disappears:
+
+```objective-c
+Dashly *dashly = [Dashly shared];
+[
+  dashly
+  onVisibilityUIChanged:^(BOOL isVisible){
+		NSLog(@"Dashly SDK — isVisible: %@", isVisible ? @"YES" : @"NO");
+}];
+```
+
+If isVisible == true, it means that some part of the SDK UI is currently being shown. If false, no SDK UI is visible on the screen.
 
 <a name="custom_url_opener_objc"></a>
 
