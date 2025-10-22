@@ -1,10 +1,11 @@
 ## Carrot quest для iOS
 
-![Version](https://img.shields.io/static/v1?label=Version&message=2.13.5&color=brightgreen)[![SwiftPM compatible](https://img.shields.io/badge/SwiftPM-compatible-brightgreen.svg)](https://swift.org/package-manager/)
+![Version](https://img.shields.io/static/v1?label=Version&message=3.0.0&color=brightgreen)[![SwiftPM compatible](https://img.shields.io/badge/SwiftPM-compatible-brightgreen.svg)](https://swift.org/package-manager/)
 
 ## Содержание
 
 - [Установка](#setup_pods)
+- [Обновление до версии 3.0.0](#3.0.0_update)
 - [Swift](#swift)
   - [Инициализация](#init_swift)
   - [Авторизация пользователей](#auth_swift)
@@ -29,25 +30,25 @@
 - [Локализация](#localization)
 - [Xcode 15](#xcode15)
 - [Использование ссылок в пушах](#Push+link) 
-- [Отлючение дебажных логов](#TurnOffLogs)
+- [Отключение дебажных логов](#TurnOffLogs)
 
 <a name="setup_pods"></a>
 
 ## Установка
 
-На данный момент Carrot quest для iOS можно установить с помощью CocoaPod и Swift Package Manager.
+На данный момент Carrot quest для iOS можно установить с помощью CocoaPods и Swift Package Manager.
 
 ## CocoaPods
-Добавьте следующую строчку в pod файл:
+Добавьте следующую строчку в Podfile:
 ```swift
 pod 'CarrotquestSDK'
 ```
 
 ## Swift Package Manager
 
-В Xcode нажмите File->Add Package Dependencies...
+В Xcode нажмите «File → Add Package Dependencies...»
 
-Затем в появившемся окне в поле "Search or Enter Package URL" вставте ссылку на SwiftPM репозиторий:
+Затем в появившемся окне в поле "Search or Enter Package URL" вставьте ссылку на SwiftPM репозиторий:
 
 ```url
 https://github.com/carrotquest/carrotquest-ios-spm.git
@@ -57,6 +58,55 @@ https://github.com/carrotquest/carrotquest-ios-spm.git
 
 Для работы с Carrot quest для iOS вам понадобится API Key и User Auth Key. Вы можете найти эти ключи на вкладке "Настройки > Разработчикам":
 ![Разработчикам](https://raw.githubusercontent.com/carrotquest/ios-sdk/master/assets/ApiKeys.png)
+
+<a name="3.0.0_update"></a>
+
+## Обновление до версии 3.0.0
+
+Обратите внимание, что при переходе на версию 3.0.0 были внесены некоторые важные изменения в способ взаимодействия с библиотекой. 
+
+Если у вас есть авторизация пользователей необходимо вызывать ее при старте приложения. Наилучшим местом для этого является successHandler у метода setup:
+
+```swift
+Carrot.shared.setup(
+    withApiKey: apiKey,
+    successHandler: {
+        if let userId = userId {
+            Carrot.shared.auth(
+                withUserId: userId, 
+                withUserAuthKey: userAuthKey, // or withHash: hash,
+                    successHandler: { carrotId in
+                        print("Carrotquest SDK user auth succeeded, CarrotId = \(carrotId)")
+                    },
+                    errorHandler: { error in
+                        print("Carrotquest SDK user auth error: " + error)
+                    })
+        }
+    },
+    errorHandler: { error in
+        print("Failed to connect Carrotquest SDK, reason: \(error)")
+    }
+)
+```
+
+Таким образом это предотвратит лишнее возникновение анонимных пользователей. 
+
+Так же, для унификации кода с AndroidSDK аргумент withTheme был вынесен из метода setup в отдельный метод:
+
+```swift
+Carrot.shared.setTheme(.fromMobile)
+```
+
+Как и раньше, возможны 4 значения:
+
+```swift
+enum Theme {
+	case light // Светлая тема
+	case dark // Темная тема
+	case fromMobile // Повторять тему устройства
+	case fromWeb // Повторять тему указанную в настройках админки
+}
+```
 
 <a name="swift"></a>
 
@@ -189,7 +239,7 @@ Carrot.shared.trackScreen(name)
 Carrot.shared.showButton(in: view)
 ```
 
-Для того чтобы скрыть кнопку возпльзуйтесь методом:
+Для того чтобы скрыть кнопку воспользуйтесь методом:
 ```Swift
 Carrot.shared.hideButton()
 ```
@@ -232,7 +282,7 @@ Carrot.shared.onVisibilityUIChanged { isVisible in
 
 ## Открытие ссылок вручную
 
-Для того, чтобы при клике на ссылку внутри SDK правильно работали диплинки (universal link) существует специальный метод ручного управления методом открытия ссылок. Его можно вызвать где угодно, но лучше всего где-то в вашем AppDeletage/SceneDelegate рядом с инициализацией SDK:
+Для того, чтобы при клике на ссылку внутри SDK правильно работали диплинки (universal link) существует специальный метод ручного управления методом открытия ссылок. Его можно вызвать где угодно, но лучше всего где-то в вашем AppDelegate/SceneDelegate рядом с инициализацией SDK:
 
 ```swift
 import CarrotSDK
@@ -263,7 +313,7 @@ CustomUrlOpener.shared.set(for: .all) { url in
 }
 ```
 
-Если что, ошибки тут нет. Актуальные версии swift позволяют не указывать label последего замыкания в вызове функции. 
+Если что, ошибки тут нет. Актуальные версии Swift позволяют не указывать label последнего замыкания в вызове функции. 
 
 <a name="notif_swift"></a>
 
@@ -544,7 +594,7 @@ Carrot *carrot = [Carrot shared];
 
 ## Открытие ссылок вручную
 
-Для того, чтобы при клике на ссылку внутри SDK правильно работали диплинки (universal link) существует специальный метод ручного управления методом открытия ссылок. Его можно вызвать где угодно, но лучше всего где-то в вашем AppDeletage/SceneDelegate рядом с инициализацией SDK:
+Для того, чтобы при клике на ссылку внутри SDK правильно работали диплинки (universal link) существует специальный метод ручного управления методом открытия ссылок. Его можно вызвать где угодно, но лучше всего где-то в вашем AppDelegate/SceneDelegate рядом с инициализацией SDK:
 
 ```objective-c
 CustomUrlOpener *opener = [CustomUrlOpener shared];
@@ -628,7 +678,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
          withCompletionHandler:(void(^)(void))completionHandler {
     CarrotNotificationService *service = [CarrotNotificationService shared];
     if ([service canHandleWithResponse:response]) {
-        [service clickNotificationWithNotificationResponse:response appGroudDomain:nil openLink:true];
+        [service clickNotificationWithNotificationResponse:response appGroudDomain:nil openLink:YES];
     } else {
         // Логика для пользовательских уведомлений
     }
@@ -650,13 +700,13 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 <string>0</string>
 ```
 
-И обязательно, убедиться, что поле имеет значение string. Если кратко, то это переключает управление уведолмениями в ручной режим и позволяет SDK правильно функционировать. Подробнее можете почитать [тут](https://firebase.google.com/docs/cloud-messaging/ios/client?hl=ru).
+И обязательно, убедиться, что поле имеет значение string. Если кратко, то это переключает управление уведомлениями в ручной режим и позволяет SDK правильно функционировать. Подробнее можете почитать [тут](https://firebase.google.com/docs/cloud-messaging/ios/client?hl=ru).
 
 <a name="notif_extension"></a>
 
 ## Дублирование уведомлений и статистика доставленных пушей
 
-Мы используем 2 канала доставки сообщений, поэтому в некоторых случаях уведомления могут дублироваться. Например: при выходе из приложения, или при очень быстром удалении уведомления, возможно получение повтороного уведомления. Для предотвращения такого поведения нужно создать Notification Service Extension. В Xcode, в списке файлов выберите свой проект, а затем File/New/Target/Notification Service Extension.
+Мы используем 2 канала доставки сообщений, поэтому в некоторых случаях уведомления могут дублироваться. Например: при выходе из приложения, или при очень быстром удалении уведомления, возможно получение повторного уведомления. Для предотвращения такого поведения нужно создать Notification Service Extension. В Xcode, в списке файлов выберите свой проект, а затем File/New/Target/Notification Service Extension.
 
 После чего необходимо зарегистрировать AppGroup в [Apple Developer Portal](https://developer.apple.com/account/resources/identifiers/list/applicationGroup). Identifier App Group должен быть уникальным, и начинаться на "group." иначе Xcode его не примет. 
 
@@ -666,13 +716,13 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 
 1) В списке файлов выберите свой проект. 
 
-2) В списке targets выберете пункт с именем вашего проекта. 
+2) В списке targets выберите пункт с именем вашего проекта. 
 
-3) Во вкладке "Singing & Capabitities" нажмите на "+ Capability". 
+3) Во вкладке "Signing & Capabilities" нажмите на "+ Capability". 
 
 4) В выпадающем списке найдите найдите и выберите App Group.
 
-5) На вкладке появится пустой список для идентификаторов App Group. Добавте туда Identifier, который зарегистрировали в Apple Developer Portal ранее. 
+5) На вкладке появится пустой список для идентификаторов App Group. Добавьте туда Identifier, который зарегистрировали в Apple Developer Portal ранее. 
 
 6) Вернитесь к списку Targets. Аналогичным образом добавте App Group к вашему Notification Service Extension. 
 
@@ -686,7 +736,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
    )
 ```
 
-Теперь нужно добавить логику в ваш Notification Service Extension. В списке файлов, должна была появиться новая папка с именем вашего Notification Service Extension. Добавте код в файл NotificationService.swift:
+Теперь нужно добавить логику в ваш Notification Service Extension. В списке файлов, должна была появиться новая папка с именем вашего Notification Service Extension. Добавьте код в файл NotificationService.swift:
 
 ```swift
 import UserNotifications
@@ -908,9 +958,9 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
 
 <a name="TurnOffLogs"></a>
 
-## Отлючение дебажных логов
+## Отключение дебажных логов
 
-Для отключения дебажных логов от встроенного в SDK moya, и от самого SDK, необходимо добавить специальный ключ в info.plist вашего проекта. 
+Для отключения дебажных логов от встроенного в SDK Moya, и от самого SDK, необходимо добавить специальный ключ в info.plist вашего проекта. 
 
 ```XML (Plist)
 <key>moyaLog</key>
