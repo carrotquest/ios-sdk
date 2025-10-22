@@ -1,12 +1,13 @@
 
 ## Dashly for iOS
 
-![Version](https://img.shields.io/static/v1?label=Version&message=2.13.5&color=brightgreen)[![SwiftPM compatible](https://img.shields.io/badge/SwiftPM-compatible-brightgreen.svg)](https://swift.org/package-manager/)
+![Version](https://img.shields.io/static/v1?label=Version&message=3.0.0&color=brightgreen)[![SwiftPM compatible](https://img.shields.io/badge/SwiftPM-compatible-brightgreen.svg)](https://swift.org/package-manager/)
 
 
 ## Table of Contents
 
 - [Installation](#setup_pods)
+- [Update 3.0.0](#3.0.0_update)
 - [Swift](#swift)
   - [Initialization](#init_swift)
   - [User authorization](#auth_swift)
@@ -33,19 +34,20 @@
 
 ## Installation
 
-At the moment Dashly for iOS can be installed via CocoaPod and Swift Package Manager.
+You can install Dashly for iOS via CocoaPods or Swift Package Manager.
 
 ## CocoaPods
-Add the following string into the pod file:
-```swift
+Add the following line to your Podfile:
+
+```ruby
 pod 'DashlySDK'
 ```
 
 ## Swift Package Manager
 
-In Xcode, click File->Add Package Dependencies...
+In Xcode, click “File → Add Package Dependency…”
 
-Then in the window that appears, in the “Search or Enter Package URL” field, paste a link to the SwiftPM repository:
+Then in the window that appears, in the “Search or Enter Package URL” field, paste the Swift Package Manager repository URL:
 
 ```url
 https://github.com/carrotquest/dashly-ios-spm.git
@@ -53,8 +55,61 @@ https://github.com/carrotquest/dashly-ios-spm.git
 
 ## Initialization
 
-You'll need API Key and User Auth Key to work with Dashly for iOS. Those can be found on Settings - Developers tab:
-![Developers](https://github.com/carrotquest/ios-sdk/blob/dashly/assets/ApiKeys.png?raw=true)<a name="swift"></a>
+You’ll need an API key and a User Auth key to work with Dashly for iOS. Those can be found on Settings - Developers tab:
+![Developers](https://github.com/carrotquest/ios-sdk/blob/dashly/assets/ApiKeys.png?raw=true)
+
+<a name="3.0.0_update"></a>
+
+## Update 3.0.0
+
+With version 3.0.0, we changed how the library integrates with your app.
+
+If you have user authorization, you need to call it when the application starts. The best place to do this is in the successHandler of the setup method:
+
+```swift
+Dashly.shared.setup(
+    withApiKey: apiKey,
+    successHandler: {
+        if let userId = userId {
+            Dashly.shared.auth(
+                withUserId: userId, 
+                withUserAuthKey: userAuthKey, // or withHash: hash,
+                    successHandler: { dashlyId in
+                        print("Dashly SDK user auth succeeded, DashlyId = \(dashlyId)")
+                    },
+                    errorHandler: { error in
+                        print("Dashly SDK user auth error: " + error)
+                    })
+        }
+    },
+    errorHandler: { error in
+        print("Failed to connect Dashly SDK, reason: \(error)")
+    }
+)
+```
+
+This prevents the unnecessary creation of anonymous users.
+
+Similarly, to unify the code with Android SDK, the withTheme argument was moved from the setup method to a separate method:
+
+```swift
+Dashly.shared.setTheme(.fromMobile)
+```
+
+As before, there are four possible values:
+
+```swift
+enum Theme {
+	case light // Light theme
+	case dark // Dark theme
+	case fromMobile // Match device theme
+	case fromWeb // Match admin panel settings
+}
+```
+
+
+
+<a name="swift"></a>
 
 # Swift
 
@@ -86,7 +141,7 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions lau
 
 ## User authorization
 
-In case your application has user authorization, you might want to send user id to Dashly. There are two ways of authorization: send userAuthKey directly, send hash generated at your backend.
+If your app has user authentication, you should pass the user ID to Dashly. There are two ways of authorization: send userAuthKey directly, send hash generated at your backend.
 
 1. Send userAuthKey directly
 
@@ -95,7 +150,7 @@ Dashly.shared.auth(
     withUserId: userId, 
     withUserAuthKey: userAuthKey,
         successHandler: { dashlyId in
-            print("Dashly SDK user auth successed, DashlyID = \(dashlyId)")
+            print("Dashly SDK user auth succeeded, DashlyID = \(dashlyId)")
         },
         errorHandler: { error in
             print("Dashly SDK user auth error: " + error)
@@ -109,7 +164,7 @@ Dashly.shared.hashedAuth(
     withUserId: userId, 
     withHash: hash,
         successHandler: { dashlyId in
-            print("Dashly SDK user auth successed, DashlyID = \(dashlyId)")
+            print("Dashly SDK user auth succeeded, DashlyID = \(dashlyId)")
         },
         errorHandler: { error in
             print("Dashly SDK user auth error: " + error)
@@ -121,7 +176,7 @@ To realize the logout function:
 ```Swift
 Dashly.shared.logout(
     successHandler: {
-        print("Dashly SDK user logout successed")
+        print("Dashly SDK user logout succeeded")
     },
     errorHandler: { error in
         print("Dashly SDK user logout error: " + error)
@@ -132,7 +187,7 @@ Dashly.shared.logout(
 
 ## User properties and events
 
-You can set user properties, using this method:
+You can set user properties using this method:
 ```Swift
 Dashly.shared.setUserProperty(userProperties)
 ```
@@ -154,19 +209,19 @@ More info on `Operations` can be found in [«User properties»](https://develope
 `DashlyUserProperty` and `EcommerceUProperty` classes should be used to set [system properties](https://developers.dashly.io/props/#_4).
 ​
 ​
-Use the following method for events tracking:
+Use the following method for event tracking:
 
 ```Swift
 Dashly.shared.trackEvent(withName: name, withParams: params)
 ```
-where `params` is a JSON string with additional set of event parameters
+where `params` is a JSON string with additional event parameters
 ​
 
 <a name="tracking_swift"></a>
 
 ## Navigation tracking
 
-B SDK has the ability to track navigation within the application in order to trigger different trigger messages on specific screens when needed. To do this, use the method:
+The SDK can track navigation in order to trigger messages on specific screens when needed. To do this, use the method:
 
 ```Swift
 let name: String = "screenName"
@@ -177,7 +232,7 @@ Dashly.shared.trackScreen(name)
 
 ## Live chat
 
-You can give your users an opportunity to start a live chat (with your operator) from anywhere. This can be done two ways - either by adding a floating button or by directly calling a chat openning method at desired moment.
+You can give your users an opportunity to start a live chat (with your operator) from anywhere. You can either add a floating button or open the chat programmatically at any time.
 ### Floating Button
 You can use the following method to add chat button:
 ```Swift
@@ -190,7 +245,7 @@ Dashly.shared.hideButton()
 ```
 
 ### Open chat from anywhere
-After initialization you can open chat from any place using thix method:
+After initialization you can open chat from any place using this method:
 ```swift
 Dashly.shared.openChat()
 ```
@@ -229,27 +284,27 @@ If isVisible == true, it means that some part of the SDK UI is currently being s
 
 ## Opening links manually
 
-In order for universal links to work correctly when clicking on a link inside the SDK, there is a special method for manually controlling the method of opening links. It can be called anywhere, but preferably somewhere in your AppDeletage/SceneDelegate near the SDK initialization:
+To handle universal links from inside the SDK, use the custom URL opener to control how links are opened. It can be called anywhere, but preferably somewhere in your AppDelegate/SceneDelegate near the SDK initialization:
 
 ```swift
-import CarrotSDK
+import DashlySDK
 
 CustomUrlOpener.shared.set(for: .chat, customLogic: { url in
       // Any custom logic for opening links
 })
 ```
 
-As you can see, the first argument that has label `for` the 4 available options:
+The first argument (labeled for) accepts one of four options:
 
 - push - changes the logic when clicking on a link in push
 - chat - changes the logic when clicking on a link in chat
 - popup - changes logic when clicking on a link in popup
 - all - changes the logic when clicking on a link in all 3 places
 
-So if you want to handle diplink (universal link) clicks in all places in the SDK, you can write some code like this:
+So if you want to handle deeplink (universal link) clicks in all places in the SDK, you can write some code like this:
 
 ```swift
-import CarrotSDK
+import DashlySDK
 
 CustomUrlOpener.shared.set(for: .all) { url in
     if url.host?.contains("YOUR DOMAIN") ?? false {
@@ -260,22 +315,22 @@ CustomUrlOpener.shared.set(for: .all) { url in
 }
 ```
 
-If anything, there is no error here. Current versions of swift do not allow you to specify the label of the last closure in a function call. 
+If anything, there is no error here. Current versions of Swift do not allow you to specify the label of the last closure in a function call. 
 
 <a name="notif_swift"></a>
 
 ## Notifications
 
-SDK uses Firebase Cloud Messaging for sending notifications. At the moment you are required to get a key and send it to our support. You can find an input for this key at "Settings" - "Developers" tab of Dashly admin panel. Cloud Messaging setup is described [here](https://firebase.google.com/docs/cloud-messaging/ios/client).
-​
-fcmToken for Dashly SDK should be set in MessagingDelegate next:
-​
+SDK uses Firebase Cloud Messaging for sending notifications. You need to obtain a key and send it to our support team. You can find an input for this key at "Settings" - "Developers" tab of Dashly admin panel. Cloud Messaging setup is described [here](https://firebase.google.com/docs/cloud-messaging/ios/client)
+
+Set the FCM token for Dashly SDK in your MessagingDelegate like this:
+
 
 ```swift
 import FirebaseMessaging
 import DashlySDK
 extension AppDelegate: MessagingDelegate {  
-    func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String) {
+    func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
         if let fcmToken = fcmToken {
             DashlyNotificationService.shared.setToken(fcmToken)
         } else {
@@ -371,7 +426,7 @@ Dashly *dashly = [Dashly shared];
   authWithUserId: userId
   withUserAuthKey: userAuthKey
   successHandler: ^(NSString *dashlyId){
-      NSLog(@"Dashly SDK user auth successed, DashlyId: %@", dashlyId);
+      NSLog(@"Dashly SDK user auth succeeded, DashlyId: %@", dashlyId);
   }
   errorHandler: ^(NSString *error){
       NSLog(@"Dashly SDK user auth error: %@", error);
@@ -387,7 +442,7 @@ Dashly *dashly = [Dashly shared];
   authWithUserId: userId
   withHash: hash
   successHandler: ^(NSString *dashlyId){
-      NSLog(@"Dashly SDK user auth successed, DashlyId: %@", dashlyId);
+      NSLog(@"Dashly SDK user auth succeeded, DashlyId: %@", dashlyId);
   }
   errorHandler: ^(NSString *error){
       NSLog(@"Dashly SDK user auth error: %@", error);
@@ -452,13 +507,13 @@ Dashly *dashly = [Dashly shared];
 ];
 ```
 
-where `params` is a JSON string with additional set of event parameters​
+where `params` is a JSON string with additional event parameters
 
 <a name="tracking_objc"></a>
 
 ## Navigation tracking
 
-B SDK has the ability to track navigation within the application in order to trigger different trigger messages on specific screens when needed. To do this, use the method:
+The SDK can track navigation in order to trigger messages on specific screens when needed. To do this, use the method:
 
 ```objective-c
 Dashly *dashly = [Dashly shared];
@@ -469,7 +524,7 @@ Dashly *dashly = [Dashly shared];
 
 ## Live chat
 
-You can give your users an opportunity to start a live chat (with your operator) from anywhere. This can be done two ways - either by adding a floating button or by directly calling a chat openning method at desired moment.
+You can give your users an opportunity to start a live chat (with your operator) from anywhere. This can be done two ways - either by adding a floating button or by directly calling a chat opening method at desired moment.
 ​
 
 ### Floating Button
@@ -490,7 +545,7 @@ Dashly *dashly = [Dashly shared];
 
 ### Open chat from anywhere
 
-After initialization you can open chat from any place using thix method:
+After initialization you can open chat from any place using this method:
 
 ```objective-c
 Dashly *dashly = [Dashly shared];
@@ -540,7 +595,7 @@ If isVisible == true, it means that some part of the SDK UI is currently being s
 
 ## Opening links manually
 
-In order for universal links to work correctly when clicking on a link inside the SDK, there is a special method for manually controlling the method of opening links. It can be called anywhere, but preferably somewhere in your AppDeletage/SceneDelegate near the SDK initialization:
+In order for universal links to work correctly when clicking on a link inside the SDK, there is a special method for manually controlling the method of opening links. It can be called anywhere, but preferably somewhere in your AppDelegate/SceneDelegate near the SDK initialization:
 
 ```objective-c
 CustomUrlOpener *opener = [CustomUrlOpener shared];
@@ -561,7 +616,9 @@ As you can see, the first argument that has label `for` the 4 available options:
 - popup - changes logic when clicking on a link in popup
 - all - changes the logic when clicking on a link in all 3 places
 
-So if you want to handle diplink (universal link) clicks in all places in the SDK, you can write some code like this:
+Note: the numeric values (e.g., 1 or 3) represent specific scopes; if an enum is available in your SDK, prefer using the enum instead of magic numbers.
+
+So if you want to handle deeplink (universal link) clicks in all places in the SDK, you can write some code like this:
 
 ```objective-c
 CustomUrlOpener *opener = [CustomUrlOpener shared];
@@ -624,7 +681,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
          withCompletionHandler:(void(^)(void))completionHandler {
     DashlyNotificationService *service = [DashlyNotificationService shared];
     if ([service canHandleWithResponse:response]) {
-        [service clickNotificationWithNotificationResponse:response appGroudDomain:nil openLink:true];
+        [service clickNotificationWithNotificationResponse:response appGroudDomain:nil openLink:YES];
     } else {
         // user notifications logic
     }
@@ -652,7 +709,7 @@ You can read more about why you need the openLink clause [here](#Push+link).
 
 ## Double notifications
 
-We're delivering messagis via 2 channels, thus same notification can be received twice. Examples: when logging out or quickly deleting a notification there is a possibility of getting the same notification. Notification Service Extension should be created to prevent such behaviour. Choose your project in files list of Xcode, then File/New/Target/Notification Service Extension.
+Because messages can arrive through two channels, the same notification may be delivered twice. Examples: when logging out or quickly deleting a notification there is a possibility of getting the same notification. Notification Service Extension should be created to prevent such behavior. Choose your project in files list of Xcode, then File/New/Target/Notification Service Extension.
 
 After that register in AppGroup [Apple Developer Portal](https://developer.apple.com/account/resources/identifiers/list/applicationGroup). Identifier App Group should be unique and start with "group.", otherwise it would not be accepted by Xcode. 
 ​
@@ -665,8 +722,8 @@ Add Identifier into Xcode:
 ​
 2) Choose your project's name in targets list. 
 ​
-3) Click "+ Capability" in "Singing & Capabitities" tab. 
-​
+3) Click "+ Capability" in "Signing & Capabilities" tab. 
+
 4) Find and choose App Group in droplist.
 ​
 5) An empty App Group identifiers list will be shown in the tab. Add Identifier previously registered on Apple Developer Portal here. 
@@ -735,17 +792,17 @@ There are methods to unsubscribe a particular user from fluff and from all maili
 A method for unsubscribing from push:
 
 ```swift
-import CarrotSDK
+import DashlySDK
 
-CarrotNotificationService.shared.pushNotificationsUnsubscribe()
+DashlyNotificationService.shared.pushNotificationsUnsubscribe()
 ```
 
 A method for unsubscribing from all push campaigns:
 
 ```swift
-import CarrotSDK
+import DashlySDK
 
-CarrotNotificationService.shared.pushCampaignsUnsubscribe()
+DashlyNotificationService.shared.pushCampaignsUnsubscribe()
 ```
 
 <a name="xcode15"></a>
@@ -777,7 +834,7 @@ Perhaps in the future, CocoaPods will be updated and this code will have to be r
 
 ## Turn off logs
 
-To turn off the debug logs from the SDK's built-in moya, and from the SDK itself, you need to add a special key to your project's info.plist. 
+To turn off the debug logs from the SDK's built-in Moya and from the SDK itself, you need to add a special key to your project's info.plist. 
 
 ```XML (Plist)
 <key>moyaLog</key>
