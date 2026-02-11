@@ -1,7 +1,7 @@
 
 ## Dashly for iOS
 
-![Version](https://img.shields.io/static/v1?label=Version&message=3.1.1&color=brightgreen)[![SwiftPM compatible](https://img.shields.io/badge/SwiftPM-compatible-brightgreen.svg)](https://swift.org/package-manager/)
+![Version](https://img.shields.io/static/v1?label=Version&message=3.1.2&color=brightgreen)[![SwiftPM compatible](https://img.shields.io/badge/SwiftPM-compatible-brightgreen.svg)](https://swift.org/package-manager/)
 
 
 ## Table of Contents
@@ -380,6 +380,38 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
 }
 ```
 
+You must also request permission to display notifications. Recommended code part:
+
+```swift
+class AppDelegate {  
+    func application(
+      _ application: UIApplication, 
+    	didFinishLaunchingWithOptions launchOptions: 											[UIApplication.LaunchOptionsKey : Any]? = nil
+    ) -> Bool {
+      
+			...
+      
+      UNUserNotificationCenter
+      	.current()
+      	.requestAuthorization(
+          options: [.alert, .badge, .sound]
+        ) { granted, error in
+            if granted {
+                DispatchQueue.main.async {
+                    UIApplication
+                  	.shared
+                  	.registerForRemoteNotifications()
+                }
+            }
+                                                                            }
+
+        return true
+    }
+}
+```
+
+We also recommend ensuring that the request to display notifications occurs before setting the token via CarrotNotificationService.shared.setToken. 
+
 <a name="init_objc"></a>
 
 # Objective-C
@@ -687,6 +719,29 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     }
 }
 ```
+
+You must also request permission to display notifications. Recommended code part:
+
+```objective-c
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary<UIApplicationLaunchOptionsKey, id> *)launchOptions {
+
+    ...
+
+    [[UNUserNotificationCenter currentNotificationCenter]
+        requestAuthorizationWithOptions:(UNAuthorizationOptionAlert | UNAuthorizationOptionBadge | UNAuthorizationOptionSound)
+                      completionHandler:^(BOOL granted, NSError * _Nullable error) {
+                          if (granted) {
+                              dispatch_async(dispatch_get_main_queue(), ^{
+                                  [[UIApplication sharedApplication] registerForRemoteNotifications];
+                              });
+                          }
+                      }];
+
+    return YES;
+}
+```
+
+We also recommend ensuring that the request to display notifications occurs before setting the token via CarrotNotificationService.shared.setToken. 
 
 <a name="important_push"></a>
 
