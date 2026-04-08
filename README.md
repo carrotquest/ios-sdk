@@ -752,7 +752,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 
 ```xml
 <key>FirebaseAppDelegateProxyEnabled</key>
-<string>0</string>
+<false/>
 ```
 
 И обязательно, убедиться, что поле имеет значение string. Если кратко, то это переключает управление уведомлениями в ручной режим и позволяет SDK правильно функционировать. Подробнее можете почитать [тут](https://firebase.google.com/docs/cloud-messaging/ios/client?hl=ru).
@@ -1015,13 +1015,23 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
 
 ## Отключение дебажных логов
 
-Для отключения дебажных логов от встроенного в SDK Moya, и от самого SDK, необходимо добавить специальный ключ в info.plist вашего проекта. 
+SDK поддерживает два отдельных ключа в `Info.plist`, которые позволяют управлять логированием:
 
-```XML (Plist)
+- `moyaLog` — отвечает только за сетевые логи Moya
+- `carrotLog` — отвечает за все логи SDK
+
+Добавьте нужные ключи в `Info.plist` вашего проекта:
+
+```xml
 <key>moyaLog</key>
+<string>0</string>
+<key>carrotLog</key>
 <string>0</string>
 ```
 
-0 - логи выключены
+Возможные значения для обоих ключей:
 
-1 - логи включены
+- `0` — логи выключены
+- `1` — логи включены
+
+Если вы хотите полностью отключить все дебажные логи SDK, установите значение `0` для `carrotLog`.
