@@ -751,7 +751,7 @@ You need to add a parameter to info.plist of your project:
 
 ```xml
 <key>FirebaseAppDelegateProxyEnabled</key>
-<string>0</string>
+<false/>
 ```
 
 And make sure that the field has a string value. Briefly, this switches the notification management to manual mode and allows the SDK to function properly. You can read more [here](https://firebase.google.com/docs/cloud-messaging/ios/client?hl=ru).
@@ -887,15 +887,25 @@ Perhaps in the future, CocoaPods will be updated and this code will have to be r
 
 <a name="TurnOffLogs"></a>
 
-## Turn off logs
+## Turn off debug logs
 
-To turn off the debug logs from the SDK's built-in Moya and from the SDK itself, you need to add a special key to your project's info.plist. 
+The SDK supports two separate keys in `Info.plist` that allow you to control logging:
 
-```XML (Plist)
+- `moyaLog` — controls only Moya network logs
+- `dashlyLog` — controls all other SDK logs
+
+Add the required keys to your app’s `Info.plist`:
+
+```xml
 <key>moyaLog</key>
+<string>0</string>
+<key>dashlyLog</key>
 <string>0</string>
 ```
 
-0 - logs off
+Possible values for both keys:
 
-1 - logs on
+- `0` — logs are disabled
+- `1` — logs are enabled
+
+If you want to completely disable all debug logs in the SDK, set `dashlyLog` to `0`.
