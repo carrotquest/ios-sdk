@@ -1,6 +1,6 @@
 ## Carrot quest для iOS
 
-![Version](https://img.shields.io/static/v1?label=Version&message=3.1.2&color=brightgreen)[![SwiftPM compatible](https://img.shields.io/badge/SwiftPM-compatible-brightgreen.svg)](https://swift.org/package-manager/)
+![Version](https://img.shields.io/static/v1?label=Version&message=#VERISON&color=brightgreen)[![SwiftPM compatible](https://img.shields.io/badge/SwiftPM-compatible-brightgreen.svg)](https://swift.org/package-manager/)
 
 ## Содержание
 
@@ -14,6 +14,7 @@
   - [Трекинг навигации](#tracking_swift)
   - [Чат с оператором](#chat_swift)
   - [Открытие ссылок вручную](#custom_url_opener_swift)
+  - [Отслеживание UTM-меток из ссылок](#track_utm)
   - [Уведомления](#notif_swift)
 - [Objective-C](#init_objc)
   - [Инициализация](#init_objc)
@@ -23,6 +24,7 @@
   - [Трекинг навигации](#tracking_objc)
   - [Чат с оператором](#chat_objc)
   - [Открытие ссылок вручную](#custom_url_opener_objc)
+  - [Отслеживание UTM-меток из ссылок](#track_utm_objc)
   - [Уведомления](#notif_objc)
 - [Важная информация о Push уведомлениях](#important_push)
 - [Дублирование уведомлений и статистика доставленных пушей](#notif_extension)
@@ -314,6 +316,140 @@ CustomUrlOpener.shared.set(for: .all) { url in
 ```
 
 Если что, ошибки тут нет. Актуальные версии Swift позволяют не указывать label последнего замыкания в вызове функции. 
+
+<a name="track_utm"></a>
+
+## Отслеживание UTM-меток из ссылок
+
+Если приложение открывается через URL Scheme или Universal Link, передайте полученный `URL` в SDK:
+
+```swift
+Carrot.shared.trackUtm(url)
+```
+
+Метод можно вызывать до завершения инициализации SDK. В этом случае SDK дождется инициализации и затем обработает ссылку.
+
+### AppDelegate
+
+Для приложений без `SceneDelegate` обработайте URL Scheme в `AppDelegate`:
+
+```swift
+import CarrotSDK
+
+extension AppDelegate {
+    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any]) -> Bool {
+        Carrot.shared.trackUtm(url)
+        return true
+    }
+}
+```
+
+Для Universal Link используйте `continue userActivity`:
+
+```swift
+import CarrotSDK
+
+extension AppDelegate {
+    func application(
+        _ application: UIApplication,
+        continue userActivity: NSUserActivity,
+        restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void
+    ) -> Bool {
+        guard userActivity.activityType == NSUserActivityTypeBrowsingWeb,
+              let url = userActivity.webpageURL else {
+            return false
+        }
+
+        Carrot.shared.trackUtm(url)
+        return true
+    }
+}
+```
+
+### SceneDelegate
+
+Если в приложении используется `SceneDelegate`, URL Scheme нужно обрабатывать в нем. В этом случае метод `application(_:open:options:)` из `AppDelegate` может не вызваться.
+
+```swift
+import CarrotSDK
+
+extension SceneDelegate {
+    func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
+        guard let url = URLContexts.first?.url else {
+            return
+        }
+
+        Carrot.shared.trackUtm(url)
+    }
+}
+```
+
+Для Universal Link в `SceneDelegate` используйте `continue userActivity`:
+
+```swift
+import CarrotSDK
+
+extension SceneDelegate {
+    func scene(_ scene: UIScene, continue userActivity: NSUserActivity) {
+        guard userActivity.activityType == NSUserActivityTypeBrowsingWeb,
+              let url = userActivity.webpageURL else {
+            return
+        }
+
+        Carrot.shared.trackUtm(url)
+    }
+}
+```
+
+### SwiftUI WindowGroup
+
+В приложениях со SwiftUI lifecycle URL Scheme обычно обрабатывается через `.onOpenURL`:
+
+```swift
+import SwiftUI
+import CarrotSDK
+
+@main
+struct ExampleApp: App {
+    var body: some Scene {
+        WindowGroup {
+            ContentView()
+                .onOpenURL { url in
+                    Carrot.shared.trackUtm(url)
+                }
+        }
+    }
+}
+```
+
+Для Universal Link в SwiftUI используйте `.onContinueUserActivity`:
+
+```swift
+import SwiftUI
+import CarrotSDK
+
+@main
+struct ExampleApp: App {
+    var body: some Scene {
+        WindowGroup {
+            ContentView()
+                .onContinueUserActivity(NSUserActivityTypeBrowsingWeb) { userActivity in
+                    guard let url = userActivity.webpageURL else {
+                        return
+                    }
+
+                    Carrot.shared.trackUtm(url)
+                }
+        }
+    }
+}
+```
+
+Проверить URL Scheme на симуляторе можно командой:
+
+```bash
+xcrun simctl openurl booted "example://open?utm_source=test&utm_medium=app&utm_campaign=demo"
+```
 
 <a name="notif_swift"></a>
 
@@ -663,6 +799,106 @@ CustomUrlOpener *opener = [CustomUrlOpener shared];
         }
    }
 ];
+```
+
+<a name="track_utm_objc"></a>
+
+## Отслеживание UTM-меток из ссылок 
+
+Если приложение открывается через URL Scheme или Universal Link, передайте полученный `NSURL` в SDK:
+
+```objective-c
+[[Carrot shared] trackUtm:url];
+```
+
+Метод можно вызывать до завершения инициализации SDK. В этом случае SDK дождется инициализации и затем обработает ссылку.
+
+### AppDelegate
+
+Для приложений без `SceneDelegate` обработайте URL Scheme в `AppDelegate`:
+
+```objective-c
+#import <CarrotSDK/CarrotSDK-Swift.h>
+
+@implementation AppDelegate
+
+- (BOOL)application:(UIApplication *)app
+            openURL:(NSURL *)url
+            options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
+    [[Carrot shared] trackUtm:url];
+    return YES;
+}
+
+@end
+```
+
+Для Universal Link используйте `continueUserActivity`:
+
+```objective-c
+#import <CarrotSDK/CarrotSDK-Swift.h>
+
+@implementation AppDelegate
+
+- (BOOL)application:(UIApplication *)application
+continueUserActivity:(NSUserActivity *)userActivity
+ restorationHandler:(void (^)(NSArray * _Nullable))restorationHandler {
+    if ([userActivity.activityType isEqualToString:NSUserActivityTypeBrowsingWeb] &&
+        userActivity.webpageURL != nil) {
+        [[Carrot shared] trackUtm:userActivity.webpageURL];
+        return YES;
+    }
+
+    return NO;
+}
+
+@end
+```
+
+### SceneDelegate
+
+Если в приложении используется `SceneDelegate`, URL Scheme нужно обрабатывать в нем. В этом случае метод `application:openURL:options:` из `AppDelegate` может не вызваться.
+
+```objective-c
+#import <CarrotSDK/CarrotSDK-Swift.h>
+
+@implementation SceneDelegate
+
+- (void)scene:(UIScene *)scene
+openURLContexts:(NSSet<UIOpenURLContext *> *)URLContexts {
+    NSURL *url = URLContexts.allObjects.firstObject.URL;
+
+    if (url != nil) {
+        [[Carrot shared] trackUtm:url];
+    }
+}
+
+@end
+```
+
+Для Universal Link в `SceneDelegate` используйте `continueUserActivity`:
+
+```objective-c
+#import <CarrotSDK/CarrotSDK-Swift.h>
+
+@implementation SceneDelegate
+
+- (void)scene:(UIScene *)scene
+continueUserActivity:(NSUserActivity *)userActivity {
+    if ([userActivity.activityType isEqualToString:NSUserActivityTypeBrowsingWeb] &&
+        userActivity.webpageURL != nil) {
+        [[Carrot shared] trackUtm:userActivity.webpageURL];
+    }
+}
+
+@end
+```
+
+> SwiftUI lifecycle недоступен для приложений, полностью написанных на Objective-C. Для таких проектов используйте `AppDelegate` или `SceneDelegate`.
+
+Проверить URL Scheme на симуляторе можно командой:
+
+```bash
+xcrun simctl openurl booted "example://open?utm_source=test&utm_medium=app&utm_campaign=demo"
 ```
 
 <a name="notif_objc"></a>
