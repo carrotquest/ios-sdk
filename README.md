@@ -1,7 +1,7 @@
 
 ## Dashly for iOS
 
-![Version](https://img.shields.io/static/v1?label=Version&message=3.1.2&color=brightgreen)[![SwiftPM compatible](https://img.shields.io/badge/SwiftPM-compatible-brightgreen.svg)](https://swift.org/package-manager/)
+![Version](https://img.shields.io/static/v1?label=Version&message=#VERISON&color=brightgreen)[![SwiftPM compatible](https://img.shields.io/badge/SwiftPM-compatible-brightgreen.svg)](https://swift.org/package-manager/)
 
 
 ## Table of Contents
@@ -15,6 +15,7 @@
   - [Navigation tracking](#tracking_swift)
   - [Live chat](#chat_swift)
   - [Opening links manually](#custom_url_opener_swift)
+  - [Tracking UTM tags from links](#track_utm)
   - [Notifications](#notif_swift)
 - [Objective-C](#init_objc)
   - [Initialization](#init_objc)
@@ -23,6 +24,7 @@
   - [Navigation tracking](#tracking_objc)
   - [Live chat](#chat_objc)
   - [Opening links manually](#custom_url_opener_objc)
+  - [Tracking UTM tags from links](#track_utm_objc)
   - [Notifications](#notif_objc)
 - [Important information about Push notifications](#important_push)
 - [Double notifications](#notif_extension)
@@ -316,6 +318,140 @@ CustomUrlOpener.shared.set(for: .all) { url in
 ```
 
 If anything, there is no error here. Current versions of Swift do not allow you to specify the label of the last closure in a function call. 
+
+<a name="track_utm"></a>
+
+## Tracking UTM Tags from Links
+
+If the application is opened via a URL Scheme or Universal Link, pass the received `URL` to the SDK:
+
+```swift
+Dashly.shared.trackUtm(url)
+```
+
+The method can be called before the SDK initialization is completed. In this case, the SDK will wait for initialization and then process the link.
+
+### AppDelegate
+
+For applications without a `SceneDelegate`, handle the URL Scheme in `AppDelegate`:
+
+```swift
+import DashlySDK
+
+extension AppDelegate {
+    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any]) -> Bool {
+        Dashly.shared.trackUtm(url)
+        return true
+    }
+}
+```
+
+For Universal Links, use `continue userActivity`:
+
+```swift
+import DashlySDK
+
+extension AppDelegate {
+    func application(
+        _ application: UIApplication,
+        continue userActivity: NSUserActivity,
+        restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void
+    ) -> Bool {
+        guard userActivity.activityType == NSUserActivityTypeBrowsingWeb,
+              let url = userActivity.webpageURL else {
+            return false
+        }
+
+        Dashly.shared.trackUtm(url)
+        return true
+    }
+}
+```
+
+### SceneDelegate
+
+If the application uses `SceneDelegate`, the URL Scheme should be handled there. In this case, the `application(_:open:options:)` method from `AppDelegate` may not be called.
+
+```swift
+import DashlySDK
+
+extension SceneDelegate {
+    func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
+        guard let url = URLContexts.first?.url else {
+            return
+        }
+
+        Dashly.shared.trackUtm(url)
+    }
+}
+```
+
+For Universal Links in `SceneDelegate`, use `continue userActivity`:
+
+```swift
+import DashlySDK
+
+extension SceneDelegate {
+    func scene(_ scene: UIScene, continue userActivity: NSUserActivity) {
+        guard userActivity.activityType == NSUserActivityTypeBrowsingWeb,
+              let url = userActivity.webpageURL else {
+            return
+        }
+
+        Dashly.shared.trackUtm(url)
+    }
+}
+```
+
+### SwiftUI WindowGroup
+
+In applications using the SwiftUI lifecycle, URL Schemes are usually handled via `.onOpenURL`:
+
+```swift
+import SwiftUI
+import DashlySDK
+
+@main
+struct ExampleApp: App {
+    var body: some Scene {
+        WindowGroup {
+            ContentView()
+                .onOpenURL { url in
+                    Dashly.shared.trackUtm(url)
+                }
+        }
+    }
+}
+```
+
+For Universal Links in SwiftUI, use `.onContinueUserActivity`:
+
+```swift
+import SwiftUI
+import DashlySDK
+
+@main
+struct ExampleApp: App {
+    var body: some Scene {
+        WindowGroup {
+            ContentView()
+                .onContinueUserActivity(NSUserActivityTypeBrowsingWeb) { userActivity in
+                    guard let url = userActivity.webpageURL else {
+                        return
+                    }
+
+                    Dashly.shared.trackUtm(url)
+                }
+        }
+    }
+}
+```
+
+You can test a URL Scheme on the simulator using the following command:
+
+```bash
+xcrun simctl openurl booted "example://open?utm_source=test&utm_medium=app&utm_campaign=demo"
+```
 
 <a name="notif_swift"></a>
 
@@ -666,6 +802,106 @@ CustomUrlOpener *opener = [CustomUrlOpener shared];
         }
    }
 ];
+```
+
+<a name="track_utm_objc"></a>
+
+## Tracking UTM Tags from Links (Objective-C)
+
+If the application is opened via a URL Scheme or Universal Link, pass the received `NSURL` to the SDK:
+
+```objc
+[[Dashly shared] trackUtm:url];
+```
+
+The method can be called before the SDK initialization is completed. In this case, the SDK will wait for initialization and then process the link.
+
+### AppDelegate
+
+For applications without a `SceneDelegate`, handle the URL Scheme in `AppDelegate`:
+
+```objc
+#import <DashlySDK/DashlySDK-Swift.h>
+
+@implementation AppDelegate
+
+- (BOOL)application:(UIApplication *)app
+            openURL:(NSURL *)url
+            options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
+    [[Dashly shared] trackUtm:url];
+    return YES;
+}
+
+@end
+```
+
+For Universal Links, use `continueUserActivity`:
+
+```objc
+#import <DashlySDK/DashlySDK-Swift.h>
+
+@implementation AppDelegate
+
+- (BOOL)application:(UIApplication *)application
+continueUserActivity:(NSUserActivity *)userActivity
+ restorationHandler:(void (^)(NSArray * _Nullable))restorationHandler {
+    if ([userActivity.activityType isEqualToString:NSUserActivityTypeBrowsingWeb] &&
+        userActivity.webpageURL != nil) {
+        [[Dashly shared] trackUtm:userActivity.webpageURL];
+        return YES;
+    }
+
+    return NO;
+}
+
+@end
+```
+
+### SceneDelegate
+
+If the application uses `SceneDelegate`, the URL Scheme should be handled there. In this case, the `application:openURL:options:` method from `AppDelegate` may not be called.
+
+```objc
+#import <DashlySDK/DashlySDK-Swift.h>
+
+@implementation SceneDelegate
+
+- (void)scene:(UIScene *)scene
+openURLContexts:(NSSet<UIOpenURLContext *> *)URLContexts {
+    NSURL *url = URLContexts.allObjects.firstObject.URL;
+
+    if (url != nil) {
+        [[Dashly shared] trackUtm:url];
+    }
+}
+
+@end
+```
+
+For Universal Links in `SceneDelegate`, use `continueUserActivity`:
+
+```objc
+#import <DashlySDK/DashlySDK-Swift.h>
+
+@implementation SceneDelegate
+
+- (void)scene:(UIScene *)scene
+continueUserActivity:(NSUserActivity *)userActivity {
+    if ([userActivity.activityType isEqualToString:NSUserActivityTypeBrowsingWeb] &&
+        userActivity.webpageURL != nil) {
+        [[Dashly shared] trackUtm:userActivity.webpageURL];
+    }
+}
+
+@end
+```
+
+> The SwiftUI lifecycle is not available for applications written entirely in Objective-C. For such projects, use `AppDelegate` or `SceneDelegate`.
+
+You can test a URL Scheme on the simulator using the following command:
+
+```bash
+xcrun simctl openurl booted "example://open?utm_source=test&utm_medium=app&utm_campaign=demo"
 ```
 
 <a name="notif_objc"></a>
