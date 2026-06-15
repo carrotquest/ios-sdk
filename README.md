@@ -1,6 +1,6 @@
 ## Carrot quest для iOS
 
-![Version](https://img.shields.io/static/v1?label=Version&message=3.1.6&color=brightgreen)[![SwiftPM compatible](https://img.shields.io/badge/SwiftPM-compatible-brightgreen.svg)](https://swift.org/package-manager/)
+![Version](https://img.shields.io/static/v1?label=Version&message=3.2.0&color=brightgreen)[![SwiftPM compatible](https://img.shields.io/badge/SwiftPM-compatible-brightgreen.svg)](https://swift.org/package-manager/)
 
 ## Содержание
 
@@ -803,7 +803,7 @@ CustomUrlOpener *opener = [CustomUrlOpener shared];
 
 <a name="track_utm_objc"></a>
 
-## Отслеживание UTM-меток из ссылок 
+## Отслеживание UTM-меток из ссылок
 
 Если приложение открывается через URL Scheme или Universal Link, передайте полученный `NSURL` в SDK:
 
