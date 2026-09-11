@@ -1,7 +1,10 @@
+---
+description: "Dashly SDK for iOS: installation via CocoaPods or Swift Package Manager, initialization, user authorization, events and push notifications."
+---
 
-## Dashly for iOS
+# Dashly for iOS
 
-![Version](https://img.shields.io/static/v1?label=Version&message=3.3.0&color=brightgreen)[![SwiftPM compatible](https://img.shields.io/badge/SwiftPM-compatible-brightgreen.svg)](https://swift.org/package-manager/)
+![Current Dashly SDK for iOS version](https://img.shields.io/static/v1?label=Version&message=3.3.0&color=brightgreen)[![Swift Package Manager compatible](https://img.shields.io/badge/SwiftPM-compatible-brightgreen.svg)](https://swift.org/package-manager/)
 
 
 ## Table of Contents
@@ -58,7 +61,7 @@ https://github.com/carrotquest/dashly-ios-spm.git
 ## Initialization
 
 You’ll need an API key and a User Auth key to work with Dashly for iOS. Those can be found on Settings - Developers tab:
-![Developers](https://github.com/carrotquest/ios-sdk/blob/dashly/assets/ApiKeys.png?raw=true)
+![Dashly admin panel Developers tab showing the API key and User Auth key fields](https://github.com/carrotquest/ios-sdk/blob/dashly/assets/ApiKeys.png?raw=true)
 
 <a name="3.0.0_update"></a>
 
@@ -113,11 +116,11 @@ enum Theme {
 
 <a name="swift"></a>
 
-# Swift
+## Swift
 
 <a name="init_swift"></a>
 
-## Initialization
+### Initialization
 
 You should add this code into your app's AppDelegate file in order to initialize Dashly:
 ​
@@ -141,7 +144,7 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions lau
 
 <a name="auth_swift"></a>
 
-## User authorization
+### User authorization
 
 If your app has user authentication, you should pass the user ID to Dashly. There are two ways of authorization: send userAuthKey directly, send hash generated at your backend.
 
@@ -187,7 +190,7 @@ Dashly.shared.logout(
 
 <a name="prop_swift"></a>
 
-## User properties and events
+### User properties and events
 
 You can set user properties using this method:
 ```Swift
@@ -221,7 +224,7 @@ where `params` is a JSON string with additional event parameters
 
 <a name="tracking_swift"></a>
 
-## Navigation tracking
+### Navigation tracking
 
 The SDK can track navigation in order to trigger messages on specific screens when needed. To do this, use the method:
 
@@ -232,10 +235,10 @@ Dashly.shared.trackScreen(name)
 
 <a name="chat_swift"></a>
 
-## Live chat
+### Live chat
 
 You can give your users an opportunity to start a live chat (with your operator) from anywhere. You can either add a floating button or open the chat programmatically at any time.
-### Floating Button
+#### Floating Button
 You can use the following method to add chat button:
 ```Swift
 Dashly.shared.showButton(in: view)
@@ -246,13 +249,13 @@ Use this method to hide chat button:
 Dashly.shared.hideButton()
 ```
 
-### Open chat from anywhere
+#### Open chat from anywhere
 After initialization you can open chat from any place using this method:
 ```swift
 Dashly.shared.openChat()
 ```
 
-### Getting the number of unread dialogs and messages
+#### Getting the number of unread dialogs and messages
 
 To keep track of the number of unread dialogs:
 
@@ -270,7 +273,7 @@ Dashly.shared.getUnreadMessagesCount { count in
 }
 ```
 
-### Tracking SDK UI Visibility
+#### Tracking SDK UI Visibility
 
 You can track whether any SDK UI element (chat, dialog list, popup, etc.) is currently visible on the screen. The callback is triggered every time the UI appears or disappears:
 
@@ -284,7 +287,7 @@ If isVisible == true, it means that some part of the SDK UI is currently being s
 
 <a name="custom_url_opener_swift"></a>
 
-## Opening links manually
+### Opening links manually
 
 To handle universal links from inside the SDK, use the custom URL opener to control how links are opened. It can be called anywhere, but preferably somewhere in your AppDelegate/SceneDelegate near the SDK initialization:
 
@@ -321,7 +324,7 @@ If anything, there is no error here. Current versions of Swift do not allow you 
 
 <a name="track_utm"></a>
 
-## Tracking UTM Tags from Links
+### Tracking UTM Tags from Links
 
 If the application is opened via a URL Scheme or Universal Link, pass the received `URL` to the SDK:
 
@@ -331,7 +334,7 @@ Dashly.shared.trackUtm(url)
 
 The method can be called before the SDK initialization is completed. In this case, the SDK will wait for initialization and then process the link.
 
-### AppDelegate
+#### AppDelegate
 
 For applications without a `SceneDelegate`, handle the URL Scheme in `AppDelegate`:
 
@@ -368,7 +371,7 @@ extension AppDelegate {
 }
 ```
 
-### SceneDelegate
+#### SceneDelegate
 
 If the application uses `SceneDelegate`, the URL Scheme should be handled there. In this case, the `application(_:open:options:)` method from `AppDelegate` may not be called.
 
@@ -403,7 +406,7 @@ extension SceneDelegate {
 }
 ```
 
-### SwiftUI WindowGroup
+#### SwiftUI WindowGroup
 
 In applications using the SwiftUI lifecycle, URL Schemes are usually handled via `.onOpenURL`:
 
@@ -455,7 +458,7 @@ xcrun simctl openurl booted "example://open?utm_source=test&utm_medium=app&utm_c
 
 <a name="notif_swift"></a>
 
-## Notifications
+### Notifications
 
 SDK uses Firebase Cloud Messaging for sending notifications. You need to obtain a key and send it to our support team. You can find an input for this key at "Settings" - "Developers" tab of Dashly admin panel. Cloud Messaging setup is described [here](https://firebase.google.com/docs/cloud-messaging/ios/client)
 
@@ -550,9 +553,9 @@ We also recommend ensuring that the request to display notifications occurs befo
 
 <a name="init_objc"></a>
 
-# Objective-C
+## Objective-C
 
-## Initialization
+### Initialization
 
 You should add this code into your app's AppDelegate file in order to initialize Dashly:
 ​
@@ -581,7 +584,7 @@ You should add this code into your app's AppDelegate file in order to initialize
 
 <a name="auth_objc"></a>
 
-## User authorization
+### User authorization
 
 In case your application has user authorization, you might want to send user id to Dashly. There are two ways of authorization: send userAuthKey directly, send hash generated at your backend.
 
@@ -632,7 +635,7 @@ Dashly *dashly = [Dashly shared];
 
 <a name="prop_objc"></a>
 
-## User properties and events
+### User properties and events
 
 You can set user properties, using this method:
 
@@ -679,7 +682,7 @@ where `params` is a JSON string with additional event parameters
 
 <a name="tracking_objc"></a>
 
-## Navigation tracking
+### Navigation tracking
 
 The SDK can track navigation in order to trigger messages on specific screens when needed. To do this, use the method:
 
@@ -690,12 +693,12 @@ Dashly *dashly = [Dashly shared];
 
 <a name="chat_objc"></a>
 
-## Live chat
+### Live chat
 
 You can give your users an opportunity to start a live chat (with your operator) from anywhere. This can be done two ways - either by adding a floating button or by directly calling a chat opening method at desired moment.
 ​
 
-### Floating Button
+#### Floating Button
 
 You can use the following method to add chat button:
 
@@ -711,7 +714,7 @@ Dashly *dashly = [Dashly shared];
 [dashly hideButton];
 ```
 
-### Open chat from anywhere
+#### Open chat from anywhere
 
 After initialization you can open chat from any place using this method:
 
@@ -720,7 +723,7 @@ Dashly *dashly = [Dashly shared];
 [dashly openChat];
 ```
 
-### Getting the number of unread dialogs and messages
+#### Getting the number of unread dialogs and messages
 
 To keep track of the number of unread dialogs:
 
@@ -744,7 +747,7 @@ Dashly *dashly = [Dashly shared];
 }];
 ```
 
-### Tracking SDK UI Visibility
+#### Tracking SDK UI Visibility
 
 You can track whether any SDK UI element (chat, dialog list, popup, etc.) is currently visible on the screen. The callback is triggered every time the UI appears or disappears:
 
@@ -761,7 +764,7 @@ If isVisible == true, it means that some part of the SDK UI is currently being s
 
 <a name="custom_url_opener_objc"></a>
 
-## Opening links manually
+### Opening links manually
 
 In order for universal links to work correctly when clicking on a link inside the SDK, there is a special method for manually controlling the method of opening links. It can be called anywhere, but preferably somewhere in your AppDelegate/SceneDelegate near the SDK initialization:
 
@@ -806,7 +809,7 @@ CustomUrlOpener *opener = [CustomUrlOpener shared];
 
 <a name="track_utm_objc"></a>
 
-## Tracking UTM Tags from Links (Objective-C)
+### Tracking UTM Tags from Links (Objective-C)
 
 If the application is opened via a URL Scheme or Universal Link, pass the received `NSURL` to the SDK:
 
@@ -816,7 +819,7 @@ If the application is opened via a URL Scheme or Universal Link, pass the receiv
 
 The method can be called before the SDK initialization is completed. In this case, the SDK will wait for initialization and then process the link.
 
-### AppDelegate
+#### AppDelegate
 
 For applications without a `SceneDelegate`, handle the URL Scheme in `AppDelegate`:
 
@@ -857,7 +860,7 @@ continueUserActivity:(NSUserActivity *)userActivity
 @end
 ```
 
-### SceneDelegate
+#### SceneDelegate
 
 If the application uses `SceneDelegate`, the URL Scheme should be handled there. In this case, the `application:openURL:options:` method from `AppDelegate` may not be called.
 
@@ -906,7 +909,7 @@ xcrun simctl openurl booted "example://open?utm_source=test&utm_medium=app&utm_c
 
 <a name="notif_objc"></a>
 
-## Notifications
+### Notifications
 
 SDK uses Firebase Cloud Messaging for sending notifications. At the moment you are required to get a key and send it to our support. You can find an input for this key at "Settings" - "Developers" tab of Dashly admin panel. Cloud Messaging setup is described [here](https://firebase.google.com/docs/cloud-messaging/ios/client).
 ​
@@ -1006,7 +1009,7 @@ After that register in AppGroup [Apple Developer Portal](https://developer.apple
 ​
 Add Identifier into Xcode:
 ​
-![AppGroup](https://github.com/carrotquest/ios-sdk/blob/dashly/assets/AppGroup.png?raw=true)
+![Xcode Signing & Capabilities tab with an App Group identifier added](https://github.com/carrotquest/ios-sdk/blob/dashly/assets/AppGroup.png?raw=true)
 ​
 
 1) Choose your project in the files list. 
@@ -1102,7 +1105,7 @@ DashlyNotificationService.shared.pushCampaignsUnsubscribe()
 
 If you are using Xcode 15 and above, and CocoaPods 1.12.1 and below, you will get a directory error like this:
 
-![Xcode](https://raw.githubusercontent.com/carrotquest/ios-sdk/master/assets/ErrorXcode15.png)
+![Xcode 15 build error caused by an outdated CocoaPods directory reference](https://raw.githubusercontent.com/carrotquest/ios-sdk/master/assets/ErrorXcode15.png)
 
 To fix this, add the following code to the end of your podfile:
 
