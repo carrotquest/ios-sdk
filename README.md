@@ -4,7 +4,7 @@ description: "Dashly SDK for iOS: installation via CocoaPods or Swift Package Ma
 
 # Dashly for iOS
 
-![Current Dashly SDK for iOS version](https://img.shields.io/static/v1?label=Version&message=3.3.0&color=brightgreen)[![Swift Package Manager compatible](https://img.shields.io/badge/SwiftPM-compatible-brightgreen.svg)](https://swift.org/package-manager/)
+![Current Dashly SDK for iOS version](https://img.shields.io/static/v1?label=Version&message=3.3.1&color=brightgreen)[![Swift Package Manager compatible](https://img.shields.io/badge/SwiftPM-compatible-brightgreen.svg)](https://swift.org/package-manager/)
 
 
 ## Table of Contents
