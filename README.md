@@ -1,6 +1,9 @@
-## Carrot quest для iOS
+---
+description: "SDK Carrot quest для iOS: установка через CocoaPods или Swift Package Manager, инициализация, авторизация пользователя, события и пуши."
+---
+# Carrot quest для iOS
 
-![Version](https://img.shields.io/static/v1?label=Version&message=3.3.0&color=brightgreen)[![SwiftPM compatible](https://img.shields.io/badge/SwiftPM-compatible-brightgreen.svg)](https://swift.org/package-manager/)
+![Текущая версия SDK Carrot quest для iOS](https://img.shields.io/static/v1?label=Version&message=3.3.1&color=brightgreen)[![Совместимость с Swift Package Manager](https://img.shields.io/badge/SwiftPM-compatible-brightgreen.svg)](https://swift.org/package-manager/)
 
 ## Содержание
 
@@ -59,7 +62,7 @@ https://github.com/carrotquest/carrotquest-ios-spm.git
 ## Инициализация
 
 Для работы с Carrot quest для iOS вам понадобится API Key и User Auth Key. Вы можете найти эти ключи на вкладке "Настройки > Разработчикам":
-![Разработчикам](https://raw.githubusercontent.com/carrotquest/ios-sdk/master/assets/ApiKeys.png)
+![Вкладка Разработчикам в панели администратора Carrot quest с полями API Key и User Auth Key](https://raw.githubusercontent.com/carrotquest/ios-sdk/master/assets/ApiKeys.png)
 
 <a name="3.0.0_update"></a>
 
@@ -112,11 +115,11 @@ enum Theme {
 
 <a name="swift"></a>
 
-# Swift
+## Swift
 
 <a name="init_swift"></a>
 
-## Инициализация
+### Инициализация
 
 Для инициализации Carrot quest вам нужно добавить следующий код в файл AppDelegate вашего приложения:
 
@@ -139,7 +142,7 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions lau
 
 <a name="auth_swift"></a>
 
-## Авторизация пользователей
+### Авторизация пользователей
 
 Если в вашем приложении присутствует авторизация пользователей, вы можете передать ID пользователя в Carrot quest. Существует два способа авторизации: напрямую передать userAuthKey, передать hash генерируемый у вас на бэке.
 
@@ -185,7 +188,7 @@ Carrot.shared.logout(
 
 <a name="prop_swift"></a>
 
-## Свойства пользователей
+### Свойства пользователей
 
 Вы можете установить необходимые свойства пользователя с помощью:
 ```Swift
@@ -209,7 +212,7 @@ UserProperty(key: key, value: value, operation: .updateOrCreate)
 
 <a name="event_swift"></a>
 
-## События
+### События
 
 Для отслеживания событий используйте:
 ```Swift
@@ -219,7 +222,7 @@ Carrot.shared.trackEvent(withName: name, withParams: params)
 
 <a name="tracking_swift"></a>
 
-## Трекинг навигации
+### Трекинг навигации
 
 B SDK есть возможность трекинга навигации внутри приложения для того, чтобы при необходимости запускать различные триггерные сообщения на определенных экранах. Для этого используйте метод:
 
@@ -230,11 +233,11 @@ Carrot.shared.trackScreen(name)
 
 <a name="chat_swift"></a>
 
-## Чат с оператором
+### Чат с оператором
 
 Вы можете дать пользователю мобильного приложения возможность перейти в чат с оператором из любого места. Это можно реализовать двумя разными путями - через плавающую кнопку, либо напрямую вызвав метод открытия чата в любое нужное время.
 
-### Плавающая кнопка (Floating Button)
+#### Плавающая кнопка (Floating Button)
 Виджет предоставляющий быстрый доступ к чату. Добавить кнопку можно с помощью следующего метода:
 
 ```Swift
@@ -246,13 +249,13 @@ Carrot.shared.showButton(in: view)
 Carrot.shared.hideButton()
 ```
 
-### Открытие чата из произвольного места
+#### Открытие чата из произвольного места
 Открыть чат можно также, вызвав из произвольного места (после инициализации) следующий код:
 ```swift
 Carrot.shared.openChat()
 ```
 
-### Получение количества непрочтенных диалогов и сообщений
+#### Получение количества непрочтенных диалогов и сообщений
 Для отслеживания количества непрочтенных диалогов:
 ```swift
 Carrot.shared.getUnreadConversationsCount { count in
@@ -268,7 +271,7 @@ Carrot.shared.getUnreadMessagesCount { count in
 }
 ```
 
-### Отслеживание отображения UI SDK
+#### Отслеживание отображения UI SDK
 
 Вы можете отследить, отображается ли сейчас какой-либо UI элемент библиотеки на экране (чат, список диалогов, попап). Колбэк вызывается каждый раз при показе или скрытии этих элементов:
 
@@ -282,7 +285,7 @@ Carrot.shared.onVisibilityUIChanged { isVisible in
 
 <a name="custom_url_opener_swift"></a>
 
-## Открытие ссылок вручную
+### Открытие ссылок вручную
 
 Для того, чтобы при клике на ссылку внутри SDK правильно работали диплинки (universal link) существует специальный метод ручного управления методом открытия ссылок. Его можно вызвать где угодно, но лучше всего где-то в вашем AppDelegate/SceneDelegate рядом с инициализацией SDK:
 
@@ -319,7 +322,7 @@ CustomUrlOpener.shared.set(for: .all) { url in
 
 <a name="track_utm"></a>
 
-## Отслеживание UTM-меток из ссылок
+### Отслеживание UTM-меток из ссылок
 
 Если приложение открывается через URL Scheme или Universal Link, передайте полученный `URL` в SDK:
 
@@ -329,7 +332,7 @@ Carrot.shared.trackUtm(url)
 
 Метод можно вызывать до завершения инициализации SDK. В этом случае SDK дождется инициализации и затем обработает ссылку.
 
-### AppDelegate
+#### AppDelegate
 
 Для приложений без `SceneDelegate` обработайте URL Scheme в `AppDelegate`:
 
@@ -366,7 +369,7 @@ extension AppDelegate {
 }
 ```
 
-### SceneDelegate
+#### SceneDelegate
 
 Если в приложении используется `SceneDelegate`, URL Scheme нужно обрабатывать в нем. В этом случае метод `application(_:open:options:)` из `AppDelegate` может не вызваться.
 
@@ -401,7 +404,7 @@ extension SceneDelegate {
 }
 ```
 
-### SwiftUI WindowGroup
+#### SwiftUI WindowGroup
 
 В приложениях со SwiftUI lifecycle URL Scheme обычно обрабатывается через `.onOpenURL`:
 
@@ -453,7 +456,7 @@ xcrun simctl openurl booted "example://open?utm_source=test&utm_medium=app&utm_c
 
 <a name="notif_swift"></a>
 
-## Уведомления
+### Уведомления
 
 Для работы с уведомлениями SDK использует сервис Firebase Cloud Messaging. В связи с этим необходимо получить ключ и отправить его в Carrot. Вы можете найти поле для ввода ключа на вкладке Настройки > Разработчикам. Процесс настройки сервиса Firebase Cloud Messaging описан [здесь](https://firebase.google.com/docs/cloud-messaging/ios/client).
 
@@ -545,11 +548,11 @@ class AppDelegate {
 
 Так же, рекомендуем убедиться, что запрос на показ уведолмений происходит раньше чем установка токена через CarrotNotificationService.shared.setToken. 
 
-# Objective-C
+## Objective-C
 
 <a name="init_objc"></a>
 
-## Инициализация
+### Инициализация
 
 Для инициализации Carrot quest вам нужно добавить следующий код в файл AppDelegate вашего приложения:
 
@@ -575,7 +578,7 @@ class AppDelegate {
 
 <a name="auth_objc"></a>
 
-## Авторизация пользователей
+### Авторизация пользователей
 
 Если в вашем приложении присутствует авторизация пользователей, вы можете передать ID пользователя в Carrot quest. Существует два способа авторизации: напрямую передать userAuthKey, передать hash генерируемый у вас на бэке.
 
@@ -626,7 +629,7 @@ Carrot *carrot = [Carrot shared];
 
 <a name="prop_objc"></a>
 
-## Свойства пользователей
+### Свойства пользователей
 
 Вы можете установить необходимые свойства пользователя с помощью:
 
@@ -659,7 +662,7 @@ UserProperty *userProp = [[UserProperty alloc] initWithKey: key value: value ope
 
 <a name="event_objc"></a>
 
-## События
+### События
 
 Для отслеживания событий используйте:
 
@@ -676,7 +679,7 @@ Carrot *carrot = [Carrot shared];
 
 <a name="tracking_objc"></a>
 
-## Трекинг навигации
+### Трекинг навигации
 
 B SDK есть возможность трекинга навигации внутри приложения для того, чтобы при необходимости запускать различные триггерные сообщения на определенных экранах. Для этого используйте метод:
 
@@ -687,11 +690,11 @@ Carrot *carrot = [Carrot shared];
 
 <a name="chat_objc"></a>
 
-## Чат с оператором
+### Чат с оператором
 
 Вы можете дать пользователю мобильного приложения возможность перейти в чат с оператором из любого места. Это можно реализовать двумя разными путями - через плавающую кнопку, либо напрямую вызвав метод открытия чата в любое нужное время.
 
-### Плавающая кнопка (Floating Button)
+#### Плавающая кнопка (Floating Button)
 
 Виджет предоставляющий быстрый доступ к чату. Добавить кнопку можно с помощью следующего метода:
 
@@ -707,7 +710,7 @@ Carrot *carrot = [Carrot shared];
 [carrot hideButton];
 ```
 
-### Открытие чата из произвольного места
+#### Открытие чата из произвольного места
 
 Открыть чат можно также, вызвав из произвольного места (после инициализации) следующий код:
 
@@ -716,7 +719,7 @@ Carrot *carrot = [Carrot shared];
 [carrot openChat];
 ```
 
-### Получение количества непрочтенных диалогов и сообщений
+#### Получение количества непрочтенных диалогов и сообщений
 
 Для отслеживания количества непрочтенных диалогов:
 
@@ -743,7 +746,7 @@ Carrot *carrot = [Carrot shared];
 }];
 ```
 
-### Отслеживание отображения UI SDK
+#### Отслеживание отображения UI SDK
 
 Вы можете отследить, отображается ли сейчас какой-либо UI элемент библиотеки на экране (чат, список диалогов, попап). Колбэк вызывается каждый раз при показе или скрытии этих элементов:
 
@@ -760,7 +763,7 @@ Carrot *carrot = [Carrot shared];
 
 <a name="custom_url_opener_objc"></a>
 
-## Открытие ссылок вручную
+### Открытие ссылок вручную
 
 Для того, чтобы при клике на ссылку внутри SDK правильно работали диплинки (universal link) существует специальный метод ручного управления методом открытия ссылок. Его можно вызвать где угодно, но лучше всего где-то в вашем AppDelegate/SceneDelegate рядом с инициализацией SDK:
 
@@ -803,7 +806,7 @@ CustomUrlOpener *opener = [CustomUrlOpener shared];
 
 <a name="track_utm_objc"></a>
 
-## Отслеживание UTM-меток из ссылок
+### Отслеживание UTM-меток из ссылок
 
 Если приложение открывается через URL Scheme или Universal Link, передайте полученный `NSURL` в SDK:
 
@@ -813,7 +816,7 @@ CustomUrlOpener *opener = [CustomUrlOpener shared];
 
 Метод можно вызывать до завершения инициализации SDK. В этом случае SDK дождется инициализации и затем обработает ссылку.
 
-### AppDelegate
+#### AppDelegate
 
 Для приложений без `SceneDelegate` обработайте URL Scheme в `AppDelegate`:
 
@@ -854,7 +857,7 @@ continueUserActivity:(NSUserActivity *)userActivity
 @end
 ```
 
-### SceneDelegate
+#### SceneDelegate
 
 Если в приложении используется `SceneDelegate`, URL Scheme нужно обрабатывать в нем. В этом случае метод `application:openURL:options:` из `AppDelegate` может не вызваться.
 
@@ -903,7 +906,7 @@ xcrun simctl openurl booted "example://open?utm_source=test&utm_medium=app&utm_c
 
 <a name="notif_objc"></a>
 
-## Уведомления
+### Уведомления
 
 Для работы с уведомлениями SDK использует сервис Firebase Cloud Messaging. В связи с этим необходимо получить ключ и отправить его в Carrot. Вы можете найти поле для ввода ключа на вкладке Настройки > Разработчикам. Процесс настройки сервиса Firebase Cloud Messaging описан [здесь](https://firebase.google.com/docs/cloud-messaging/ios/client).
 
@@ -1003,7 +1006,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 
 Теперь необходимо добавить Identifier в Xcode:
 
-![AppGroup](https://raw.githubusercontent.com/carrotquest/ios-sdk/dashly/assets/AppGroup.png)
+![Вкладка Xcode Signing & Capabilities с добавленным идентификатором App Group](https://raw.githubusercontent.com/carrotquest/ios-sdk/dashly/assets/AppGroup.png)
 
 1) В списке файлов выберите свой проект. 
 
@@ -1088,7 +1091,7 @@ CarrotNotificationService.shared.pushCampaignsUnsubscribe()
 
 Для того, чтобы SDK автоматически подтягивал и русскую локализацию, кроме стандартной, английской, необходимо убедиться, что в Xcode проекте такая локализация включена. 
 
-![Локализация](https://raw.githubusercontent.com/carrotquest/ios-sdk/master/assets/Localozations.png)
+![Список локализаций проекта в Xcode с добавленным русским языком](https://raw.githubusercontent.com/carrotquest/ios-sdk/master/assets/Localozations.png)
 
 <a name="xcode15"></a>
 
@@ -1096,7 +1099,7 @@ CarrotNotificationService.shared.pushCampaignsUnsubscribe()
 
 Если вы используете Xcode 15 и выше, и CocoaPods 1.12.1 и ниже, то у вас возникнет ошибка директорий, вроде такой:
 
-![Локализация](https://raw.githubusercontent.com/carrotquest/ios-sdk/master/assets/ErrorXcode15.png)
+![Ошибка сборки в Xcode 15, вызванная устаревшей ссылкой на директорию CocoaPods](https://raw.githubusercontent.com/carrotquest/ios-sdk/master/assets/ErrorXcode15.png)
 
 Чтобы исправить это, добавьте следующий код в конец своего podfile:
 
@@ -1135,7 +1138,7 @@ example://section
 
 Итак, вы можете приложить ссылку к пушу. 
 
-![PushLink](https://raw.githubusercontent.com/carrotquest/ios-sdk/master/assets/Push1.png)
+![Пример пуш-уведомления с прикреплённой ссылкой в панели Carrot quest](https://raw.githubusercontent.com/carrotquest/ios-sdk/master/assets/Push1.png)
 
 Однако, не все так просто. Внутри обработчика пуша лежит функция:
 
@@ -1168,7 +1171,7 @@ deeplink://test
 
 Перейдем к настройке. Выберите цель в настройках проекта Xcode и перейдите на вкладку «Информация». Внизу страницы вы найдете раздел «URL Types».
 
-![URL_scheme](https://raw.githubusercontent.com/carrotquest/ios-sdk/master/assets/Push2.png)
+![Раздел URL Types на вкладке Info в настройках проекта Xcode](https://raw.githubusercontent.com/carrotquest/ios-sdk/master/assets/Push2.png)
 
 Нажав `+`, мы можем создать новый тип. В качестве идентификатора люди часто повторно используют пакет приложения. Для схем URL-адресов мы рекомендуем использовать название приложения (или сокращенное название), чтобы оно было как можно более кратким. В нем не должно быть никаких специальных символов. Мы будем использовать `deeplink` в качестве примера.
 
