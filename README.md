@@ -3,7 +3,7 @@ description: "SDK Carrot quest для iOS: установка через CocoaPo
 ---
 # Carrot quest для iOS
 
-![Текущая версия SDK Carrot quest для iOS](https://img.shields.io/static/v1?label=Version&message=3.4.0&color=brightgreen)[![Совместимость с Swift Package Manager](https://img.shields.io/badge/SwiftPM-compatible-brightgreen.svg)](https://swift.org/package-manager/)
+![Текущая версия SDK Carrot quest для iOS](https://img.shields.io/static/v1?label=Version&message=3.4.1&color=brightgreen)[![Совместимость с Swift Package Manager](https://img.shields.io/badge/SwiftPM-compatible-brightgreen.svg)](https://swift.org/package-manager/)
 
 ## Содержание
 
